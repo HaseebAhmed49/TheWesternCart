@@ -1,0 +1,12 @@
+bin/
+obj/
+/packages/
+riderModule.iml
+/_ReSharper.Caches/
+Infrastructure/.DS_Store
+Core/.DS_Store
+API/.DS_Store
+.DS_Store
+.vscode/
+API/appsettings.json
+API/appsettings.Development.json
