@@ -19,5 +19,8 @@ namespace Core.Entities
         public ICollection<Comment> Comments { get; set; }
         public decimal? Discount { get; set; }
         public bool IsInStock { get; set; }
+        public string PictureUrl { get; set; }    
+        public ClothingBrand ClothingBrand { get; set; }
+        public Guid ClothingBrandId { get; set; }
     }
 }

@@ -8,7 +8,7 @@ namespace Core.Entities
 {
     public class FavouriteItem: BaseEntity
     {
-        public Guid UserId { get; set; }
+        public string UserId { get; set; }
         public User User { get; set; }
         public Guid ClothingItemId { get; set; }
         public ClothingItem ClothingItem { get; set; }        
