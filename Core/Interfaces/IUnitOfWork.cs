@@ -11,11 +11,9 @@ namespace Core.Interfaces
     public interface IUnitOfWork : IDisposable
     {
         IGenericRepository<T> GenericRepository<T>() where T : BaseEntity;
-        IBasketRepository BasketRepository { get; }
-        IClothingItemRepository ClothingItemRepository { get; }
-        
+        IClothingItemRepository ClothingItemRepository { get; }        
         ICommentRepository CommentRepository { get; }
-        IFavouriteItemRepository FavoriteItemRepository { get; }
+        // IFavouriteItemRepository FavoriteItemRepository { get; }
         ILikeDislikeRepository LikeDislikeRepository { get; }
         INotificationRepository NotificationRepository { get; }
         IRatingRepository RatingRepository { get; }

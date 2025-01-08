@@ -4,12 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Core.Entities;
 
-namespace Core.Interfaces
+namespace Application.Interfaces
 {
-    public interface IBasketRepository
+    public interface IBasketService
     {
         Task<CustomerBasket> GetBasketAsync(string basketId);
         Task<CustomerBasket> UpdateBasketAsync(CustomerBasket basket);
         Task<bool> DeleteBasketAsync(string basketId);
+
     }
 }

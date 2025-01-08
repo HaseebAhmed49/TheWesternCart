@@ -17,10 +17,12 @@ namespace Core.Entities
         public Category Category { get; set; }
         public ICollection<Rating> Ratings { get; set; }
         public ICollection<Comment> Comments { get; set; }
+
+        public ICollection<FavouriteItem> FavouriteItems { get; set; }
         public decimal? Discount { get; set; }
         public bool IsInStock { get; set; }
         public string PictureUrl { get; set; }    
-        public ClothingBrand ClothingBrand { get; set; }
         public Guid ClothingBrandId { get; set; }
+        public ClothingBrand ClothingBrand { get; set; }
     }
 }

@@ -10,3 +10,4 @@ API/.DS_Store
 .vscode/
 API/appsettings.json
 API/appsettings.Development.json
+.vs

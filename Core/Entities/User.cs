@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Core.Common;
 using Core.Entities.Enums;
 using Core.Entities.OrderAggregate;
 using Microsoft.AspNetCore.Identity;
@@ -11,10 +6,12 @@ namespace Core.Entities
 {
     public class User : IdentityUser
     {
-        public string Username { get; set; }
-        public string Email { get; set; }
-        public string PasswordHash { get; set; }
-        public Role Role { get; set; }    public ShippingAddress Address { get; set; }
+        public string Name { get; set; }
+        public DateOnly DateOfBirth { get; set; }
+        public DateTime Created { get; set; } = DateTime.UtcNow;
+        public DateTime LastActive { get; set; } = DateTime.UtcNow;
+        public ShippingAddress Address { get; set; }
+        public ICollection<AppUserRole> UserRoles { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
         public virtual ICollection<OrderHistory> OrderHistories { get; set; } 
         public virtual ICollection<FavouriteItem> FavoriteItems { get; set; }
