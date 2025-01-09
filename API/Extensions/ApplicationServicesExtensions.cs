@@ -19,7 +19,7 @@ namespace API.Extensions
             
             services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseSqlServer(config.GetConnectionString("DefaultConnection"));
+                options.UseSqlServer(config.GetConnectionString("DefaultDockerDbConnection"));
             });
             
             services.AddSingleton<IConnectionMultiplexer>(c => 

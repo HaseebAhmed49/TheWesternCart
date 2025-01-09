@@ -50,7 +50,7 @@ namespace Infrastructure.Context
             modelBuilder.ApplyConfiguration(new OrderHistoryConfiguration());
             modelBuilder.ApplyConfiguration(new OrderItemHistoryConfiguration());
 
-            SeedDataInitializer.ContextSeed(modelBuilder);
+            // SeedDataInitializer.ContextSeed(modelBuilder);
         }
             
     }
