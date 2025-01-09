@@ -9,6 +9,7 @@ using Infrastructure.SeedData;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace Infrastructure.Context
 {
@@ -50,7 +51,17 @@ namespace Infrastructure.Context
             modelBuilder.ApplyConfiguration(new OrderHistoryConfiguration());
             modelBuilder.ApplyConfiguration(new OrderItemHistoryConfiguration());
 
-            // SeedDataInitializer.ContextSeed(modelBuilder);
+            SeedDataInitializer.ContextSeed(modelBuilder);
+        }
+
+        // This avoids the warnings
+        // System.InvalidOperationException: An error was generated for warning 'Microsoft.EntityFrameworkCore.Migrations.PendingModelChangesWarning': 
+        // The model for context 'ApplicationDbContext' has pending changes. Add a new migration before updating the database. This exception can be 
+        // suppressed or logged by passing event ID 'RelationalEventId.PendingModelChangesWarning' to the 'ConfigureWarnings' method in 'DbContext.OnConfiguring' or 'AddDbContext'.
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.ConfigureWarnings(warnings =>
+                warnings.Ignore(RelationalEventId.PendingModelChangesWarning));
         }
             
     }
