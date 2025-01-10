@@ -6,7 +6,7 @@ using Core.Entities;
 
 namespace Core.Interfaces
 {
-    public interface IFavouriteRepository : IGenericRepository<FavouriteItem>
+    public interface IFavouriteItemRepository : IGenericRepository<FavouriteItem>
     {
         Task<IEnumerable<FavouriteItem>> GetFavoritesByUserIdAsync(string userId);
         Task<bool> IsFavoriteAsync(Guid clothingItemId, string userId);

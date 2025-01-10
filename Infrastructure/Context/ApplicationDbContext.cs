@@ -21,6 +21,7 @@ namespace Infrastructure.Context
         {
         }
         public DbSet<ClothingItem> ClothingItems { get; set; }
+        public DbSet<ClothingBrand> ClothingBrands { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<FavouriteItem> FavoriteItems { get; set; }
         public DbSet<Rating> Ratings { get; set; }
@@ -63,6 +64,5 @@ namespace Infrastructure.Context
             optionsBuilder.ConfigureWarnings(warnings =>
                 warnings.Ignore(RelationalEventId.PendingModelChangesWarning));
         }
-            
     }
 }
