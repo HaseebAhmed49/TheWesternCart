@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Application.Interfaces;
 using Application.Mapping;
 using Application.Services;
+using Application.Services.Interfaces;
 using Application.UoW;
 using Core.Interfaces;
 using Infrastructure.Context;
@@ -40,7 +41,8 @@ namespace API.Extensions
 
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddAutoMapper(cfg => cfg.AddProfile<AutoMapperProfile>());
+            services.AddAutoMapper(typeof(AutoMapperProfile));
+            services.AddScoped<ITokenService, TokenService>();
             return services;
         }
     }

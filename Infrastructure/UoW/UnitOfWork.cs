@@ -28,29 +28,38 @@ namespace Infrastructure.UoW
         private IRatingRepository _ratingRepository;
         private IWishListRepository _wishListRepository;
         private IUserRepository _userRepository;
+
         public UnitOfWork(
             ApplicationDbContext context,
             UserManager<User> userManager,
             SignInManager<User> signInManager,
-            RoleManager<AppRole> roleManager)
+            RoleManager<AppRole> roleManager
+        )
         {
             _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
         }
-        public IGenericRepository<T> GenericRepository<T>() where T : BaseEntity
+
+        public IGenericRepository<T> GenericRepository<T>()
+            where T : BaseEntity
         {
-            if (_repositories == null) _repositories = new Hashtable();
+            if (_repositories == null)
+                _repositories = new Hashtable();
             var type = typeof(T).Name;
             if (!_repositories.ContainsKey(type))
             {
                 var repositoryType = typeof(GenericRepository<>);
-                var repositoryInstance = Activator.CreateInstance(repositoryType.MakeGenericType(typeof(T)), _context);
+                var repositoryInstance = Activator.CreateInstance(
+                    repositoryType.MakeGenericType(typeof(T)),
+                    _context
+                );
                 _repositories.Add(type, repositoryInstance);
             }
             return (GenericRepository<T>)_repositories[type];
         }
+
         public IClothingItemRepository ClothingItemRepository =>
             _clothingItemRepository ??= new ClothingItemRepository(_context);
         public ICommentRepository CommentRepository =>
@@ -65,8 +74,7 @@ namespace Infrastructure.UoW
             _ratingRepository ??= new RatingRepository(_context);
         public IWishListRepository WishListRepository =>
             _wishListRepository ??= new WishListRepository(_context);
-        public IUserRepository UserRepository =>
-            _userRepository ??= new UserRepository(_context);
+        public IUserRepository UserRepository => _userRepository ??= new UserRepository(_context);
         public UserManager<User> UserManager => _userManager;
         public SignInManager<User> SignInManager => _signInManager;
         public RoleManager<AppRole> RoleManager => _roleManager;
@@ -79,11 +87,14 @@ namespace Infrastructure.UoW
         {
             return await _context.SaveChangesAsync();
         }
+
         public bool HasChanges()
         {
             return _context.ChangeTracker.HasChanges();
         }
+
         private bool disposed = false;
+
         protected virtual void Dispose(bool disposing)
         {
             if (!this.disposed)
@@ -95,10 +106,11 @@ namespace Infrastructure.UoW
             }
             this.disposed = true;
         }
+
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
-        }        
+        }
     }
 }

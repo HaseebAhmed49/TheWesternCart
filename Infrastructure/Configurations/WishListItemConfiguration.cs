@@ -12,14 +12,16 @@ namespace Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<WishListItem> builder)
         {
-            builder.HasOne(wi => wi.ClothingItem)
+            builder
+                .HasOne(wi => wi.ClothingItem)
                 .WithMany()
                 .HasForeignKey(wi => wi.ClothingItemId)
                 .OnDelete(DeleteBehavior.Cascade);
-            builder.HasOne(wi => wi.Wishlist)
+            builder
+                .HasOne(wi => wi.WishList)
                 .WithMany(w => w.Items)
-                .HasForeignKey(wi => wi.WishlistId)
+                .HasForeignKey(wi => wi.WishListId)
                 .OnDelete(DeleteBehavior.Cascade);
-        }        
+        }
     }
 }

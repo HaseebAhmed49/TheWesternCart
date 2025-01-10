@@ -4,15 +4,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using Core.Common;
 using Core.Entities;
-using Microsoft.AspNetCore.Identity;
 using Core.Interfaces;
+using Microsoft.AspNetCore.Identity;
 
 namespace Application.UoW
 {
     public interface IUnitOfWork : IDisposable
     {
-        IGenericRepository<T> GenericRepository<T>() where T : BaseEntity;
-        IClothingItemRepository ClothingItemRepository { get; }        
+        IGenericRepository<T> GenericRepository<T>()
+            where T : BaseEntity;
+        IClothingItemRepository ClothingItemRepository { get; }
         ICommentRepository CommentRepository { get; }
         IFavouriteItemRepository FavoriteItemRepository { get; }
         ILikeDislikeRepository LikeDislikeRepository { get; }
@@ -23,6 +24,6 @@ namespace Application.UoW
         UserManager<User> UserManager { get; }
         SignInManager<User> SignInManager { get; }
         RoleManager<AppRole> RoleManager { get; }
-        Task<int> SaveAsync();        
+        Task<int> SaveAsync();
     }
 }

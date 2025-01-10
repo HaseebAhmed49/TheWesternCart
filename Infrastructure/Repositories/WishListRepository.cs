@@ -11,20 +11,21 @@ namespace Infrastructure.Repositories
 {
     public class WishListRepository : GenericRepository<WishList>, IWishListRepository
     {
-        public WishListRepository(ApplicationDbContext context) : base(context)
+        public WishListRepository(ApplicationDbContext context)
+            : base(context) { }
+
+        public async Task<IReadOnlyList<WishList>> GetWishListsByUserIdAsync(string userId)
         {
-        }
-        public async Task<IReadOnlyList<WishList>> GetWishlistsByUserIdAsync(string userId)
-        {
-            return await _context.Wishlists
-                .Where(w => w.UserId == userId)
+            return await _context
+                .Wishlists.Where(w => w.UserId == userId)
                 .Include(w => w.Items)
                 .ToListAsync();
         }
-        public async Task<WishList?> GetWishlistByNameAsync(string userId, string name)
+
+        public async Task<WishList?> GetWishListByNameAsync(string userId, string name)
         {
-            return await _context.Wishlists
-                .Include(w => w.Items)
+            return await _context
+                .Wishlists.Include(w => w.Items)
                 .FirstOrDefaultAsync(w => w.UserId == userId && w.Name == name);
         }
     }

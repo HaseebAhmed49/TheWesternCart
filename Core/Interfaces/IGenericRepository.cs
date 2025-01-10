@@ -7,7 +7,8 @@ using Core.Specifications.Interfaces;
 
 namespace Core.Interfaces
 {
-    public interface IGenericRepository<T> where T : BaseEntity
+    public interface IGenericRepository<T>
+        where T : BaseEntity
     {
         Task<T> GetByIdAsync(Guid id);
         Task<IReadOnlyList<T>> ListAllAsync();
@@ -16,6 +17,9 @@ namespace Core.Interfaces
         Task<int> CountAsync(ISpecification<T> spec);
         void Add(T entity);
         void Update(T entity);
-        void Remove(T entity);        
+        void Remove(T entity);
+        Task AddAsync(T entity);
+        Task UpdateAsync(T entity);
+        Task RemoveAsync(T entity);
     }
 }

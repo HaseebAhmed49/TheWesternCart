@@ -12,17 +12,17 @@ namespace Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<WishList> builder)
         {
-            builder.Property(w => w.Name)
-                .IsRequired()
-                .HasMaxLength(100);
-            builder.HasMany(w => w.Items)
-                .WithOne(wi => wi.Wishlist)
-                .HasForeignKey(wi => wi.WishlistId)
+            builder.Property(w => w.Name).IsRequired().HasMaxLength(100);
+            builder
+                .HasMany(w => w.Items)
+                .WithOne(wi => wi.WishList)
+                .HasForeignKey(wi => wi.WishListId)
                 .OnDelete(DeleteBehavior.Cascade);
-            builder.HasOne(w => w.User)
+            builder
+                .HasOne(w => w.User)
                 .WithMany(u => u.Wishlists)
                 .HasForeignKey(w => w.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
-        }        
+        }
     }
 }
