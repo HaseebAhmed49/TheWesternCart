@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.Interfaces;
+using Application.Mapping;
 using Application.Services;
 using Application.UoW;
 using Core.Interfaces;
@@ -16,28 +17,30 @@ namespace API.Extensions
 {
     public static class ApplicationServicesExtensions
     {
-        public static IServiceCollection AddApplicationServices(this IServiceCollection services,
-        IConfiguration config)
+        public static IServiceCollection AddApplicationServices(
+            this IServiceCollection services,
+            IConfiguration config
+        )
         {
             services.AddSingleton<IResponseCacheService, ResponseCacheService>();
-            
+
             services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseSqlServer(config.GetConnectionString("DefaultDockerDbConnection"));
             });
-            
-            services.AddSingleton<IConnectionMultiplexer>(c => 
+
+            services.AddSingleton<IConnectionMultiplexer>(c =>
             {
                 var options = ConfigurationOptions.Parse(config.GetConnectionString("Redis"));
                 return ConnectionMultiplexer.Connect(options);
             });
-            
+
             services.AddSingleton<IResponseCacheService, ResponseCacheService>();
             services.AddScoped<IBasketService, BasketService>();
 
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            
+            services.AddAutoMapper(cfg => cfg.AddProfile<AutoMapperProfile>());
             return services;
         }
     }
