@@ -47,6 +47,11 @@ namespace API.Extensions
             services.AddScoped<IOrderHistoryService, OrderHistoryService>();
             services.AddScoped<IWishListService, WishListService>();
             services.AddScoped<IRatingService, RatingService>();
+            services.AddScoped<ILikeDislikeService, LikeDislikeService>();
+            services.AddScoped<INotificationService, NotificationService>();
+            services.AddScoped<IFavouriteItemService, FavouriteItemService>();
+            services.AddScoped<ICommentService, CommentService>();
+            services.AddScoped<IPaymentService, PaymentService>();
             return services;
         }
     }
