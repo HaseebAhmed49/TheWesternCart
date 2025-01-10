@@ -43,6 +43,10 @@ namespace API.Extensions
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddAutoMapper(typeof(AutoMapperProfile));
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IOrderHistoryService, OrderHistoryService>();
+            services.AddScoped<IWishListService, WishListService>();
+            services.AddScoped<IRatingService, RatingService>();
             return services;
         }
     }

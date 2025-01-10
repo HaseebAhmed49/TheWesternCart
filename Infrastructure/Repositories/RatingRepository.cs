@@ -34,6 +34,17 @@ namespace Infrastructure.Repositories
                 return null;
             }
         }
-        
+
+        public async Task UpdateRatingAsync(string userId, Guid clothingItemId, int value)
+        {
+            var rating = await _context.Ratings
+                .Where(r => r.ClothingItemId == clothingItemId && r.UserId == userId)
+                .FirstOrDefaultAsync();
+            if (rating != null)
+            {
+                rating.Score = value;
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }
