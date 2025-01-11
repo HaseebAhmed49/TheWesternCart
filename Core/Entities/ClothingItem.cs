@@ -21,8 +21,9 @@ namespace Core.Entities
         public ICollection<FavouriteItem> FavouriteItems { get; set; }
         public decimal? Discount { get; set; }
         public bool IsInStock { get; set; }
-        public string PictureUrl { get; set; }    
         public Guid ClothingBrandId { get; set; }
         public ClothingBrand ClothingBrand { get; set; }
+
+        public ICollection<ClothingItemPhoto?> ClothingItemPhotos { get; set; } = new List<ClothingItemPhoto?>();    
     }
 }

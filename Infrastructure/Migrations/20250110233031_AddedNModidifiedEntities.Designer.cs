@@ -4,6 +4,7 @@ using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250110233031_AddedNModidifiedEntities")]
+    partial class AddedNModidifiedEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -170,6 +173,10 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<string>("PictureUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
@@ -185,170 +192,87 @@ namespace Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("0b6ee263-53e5-42c6-86b2-659aa3237d0c"),
+                            Id = new Guid("30eac977-73e9-46ae-8a1f-bfcfe74d018a"),
                             Category = 2,
                             ClothingBrandId = new Guid("3d6f79a2-c462-4c28-ae5f-0ec93b7f4e01"),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Classic Chanel tweed jacket in black.",
+                            Description = "Classic Chanel tweed jacket in black and white.",
                             Gender = 1,
                             IsInStock = true,
-                            Name = "Chanel JACKET",
+                            Name = "Chanel Tweed Jacket",
+                            PictureUrl = "images/clothing/chanel_tweed_jacket.jpg",
                             Price = 5000.00m,
                             Size = 2
                         },
                         new
                         {
-                            Id = new Guid("b60e8ccf-8eaf-4d26-873a-ac1096b6bcbd"),
-                            Category = 3,
+                            Id = new Guid("eafb77a2-e173-49a8-b52e-504213c82dee"),
+                            Category = 5,
                             ClothingBrandId = new Guid("b5d6b8f8-dad4-4f2f-8c52-2911d856b3ad"),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "The LV Gram Square Cat Eye sunglasses feature a distinctive signature from Louis Vuitton’s jewelry and belts collections. The slim acetate and metal temples are adorned with the LV Initials and two Monogram Flowers finely crafted in gold-tone metal. Monogram Flower details on the lenses and end tips add an extra House touch. These stylish, feminine sunglasses are ideal for accenting a summer outfit.",
+                            Description = "Iconic Louis Vuitton bag with monogram canvas.",
                             Gender = 1,
                             IsInStock = true,
-                            Name = "LV Gram Square Cat Eye Sunglasses",
+                            Name = "Louis Vuitton Monogram Bag",
+                            PictureUrl = "images/clothing/lv_monogram_bag.jpg",
                             Price = 3200.00m,
                             Size = 2
                         },
                         new
                         {
-                            Id = new Guid("209cb7ec-e2c6-4518-b16e-84a879c6d9fa"),
-                            Category = 4,
+                            Id = new Guid("0fb81dc0-6fc6-491e-a49d-ede408abe55a"),
+                            Category = 5,
                             ClothingBrandId = new Guid("e96c60b6-09df-4e1a-9d6c-617bdd48eaf5"),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "New for Winter 2024, the Dior Icon heeled ankle boot transcends House codes of couture refinement. The black suede calfskin upper is elevated by elastic bands on the sides and the gold-finish metal CD signature on the back. The 8-cm (3) Graphic Cannage cylindrical heel in gold-finish metal offers a modern 3D version of the House's iconic motif. Featuring a square toe, the sophisticated and comfortable ankle boot will add the finishing touch to any of the season's looks.",
+                            Description = "Classic Dior Saddle Bag in blue oblique canvas.",
                             Gender = 1,
                             IsInStock = true,
-                            Name = "Dior Icon Heeled Ankle Boot",
+                            Name = "Dior Saddle Bag",
+                            PictureUrl = "images/clothing/dior_saddle_bag.jpg",
                             Price = 2900.00m,
                             Size = 2
                         },
                         new
                         {
-                            Id = new Guid("96f4e9a4-9e2a-43ed-9f3d-d4cd10bf8b29"),
+                            Id = new Guid("16a780d2-13f2-435f-9dd4-06da87a725aa"),
                             Category = 3,
                             ClothingBrandId = new Guid("c981db82-b2f1-48c3-9864-efc6c56a5b0e"),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "The GG Marmont belt continues to enrich each new collection with its streamlined design. Inspired by an archival design from the 1970s, the line's monogram Double G hardware is presented in a shiny silver tone atop this black leather variation.",
+                            Description = "Black leather belt with double G buckle from Gucci.",
                             Gender = 0,
                             IsInStock = true,
-                            Name = "Gucci GG MARMONT THIN BELT",
+                            Name = "Gucci GG Belt",
+                            PictureUrl = "images/clothing/gucci_belt.jpg",
                             Price = 450.00m,
                             Size = 3
                         },
                         new
                         {
-                            Id = new Guid("6fbdeba4-dff9-4ce0-98dd-f6977b887b5c"),
-                            Category = 0,
+                            Id = new Guid("7a68125c-5a2c-4c29-8548-e763db5ac5e5"),
+                            Category = 5,
                             ClothingBrandId = new Guid("a2c5c305-f2c2-45e7-8f7d-c489bb7f7e8a"),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "An essential item of the brand, the Prada jersey T-shirt embodies the luxury of simplicity that becomes an attitude and search to reinvent the bases and propose new meanings. The design is accented with the brand's emblematic lettering logo presented here in a silicone version.",
+                            Description = "Classic black nylon backpack with leather trim.",
                             Gender = 1,
                             IsInStock = true,
-                            Name = "Prada Cotton T-shirt",
+                            Name = "Prada Nylon Backpack",
+                            PictureUrl = "images/clothing/prada_backpack.jpg",
                             Price = 950.00m,
                             Size = 2
                         },
                         new
                         {
-                            Id = new Guid("041ec767-c1b2-4345-ab32-9283215cb9a9"),
+                            Id = new Guid("354adb99-4de5-4484-a162-2ab449cf70d6"),
                             Category = 0,
                             ClothingBrandId = new Guid("5d24a48b-6c72-4e2a-9ef2-64d0f657bfc6"),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "A regular-fit, long-sleeved fluid shirt featuring an all-over tonal Barocco devore motif.",
+                            Description = "Versace silk shirt with baroque print in gold and black.",
                             Gender = 0,
                             IsInStock = true,
-                            Name = "Versace Barocco Devore Shirt",
+                            Name = "Versace Silk Shirt",
+                            PictureUrl = "images/clothing/versace_silk_shirt.jpg",
                             Price = 1200.00m,
                             Size = 3
-                        });
-                });
-
-            modelBuilder.Entity("Core.Entities.ClothingItemPhoto", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("ClothingItemId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsMain")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("LastUpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("PublicId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClothingItemId");
-
-                    b.ToTable("ClothingItemPhotos");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("863e4d73-466d-4e20-8441-0e088306caf1"),
-                            ClothingItemId = new Guid("0b6ee263-53e5-42c6-86b2-659aa3237d0c"),
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsMain = true,
-                            PublicId = "PublicId6",
-                            Url = "https://www.chanel.com/images//t_zoomportee/f_auto//jacket-black-lambskin-lambskin-packshot-alternative-p78125c7009094305-9548808159262.jpg"
-                        },
-                        new
-                        {
-                            Id = new Guid("254477ac-5297-4578-a600-19baa2ff90d0"),
-                            ClothingItemId = new Guid("b60e8ccf-8eaf-4d26-873a-ac1096b6bcbd"),
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsMain = true,
-                            PublicId = "PublicId5",
-                            Url = "https://eu.louisvuitton.com/images/is/image/lv/1/PP_VP_L/louis-vuitton-lv-gram-square-cat-eye-sunglasses-s00-sunglasses--Z2459U_PM2_Front%20view.png?wid=1090&hei=1090"
-                        },
-                        new
-                        {
-                            Id = new Guid("bae7ecd0-5b46-4ee3-8115-ac5b578b111e"),
-                            ClothingItemId = new Guid("209cb7ec-e2c6-4518-b16e-84a879c6d9fa"),
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsMain = true,
-                            PublicId = "PublicId4",
-                            Url = "https://www.dior.com/couture/ecommerce/media/catalog/product/Q/K/1721839565_KCT067VVV_S900_E03_GHC.jpg?imwidth=720"
-                        },
-                        new
-                        {
-                            Id = new Guid("5f286a7c-29c1-400d-958d-49a000315eaa"),
-                            ClothingItemId = new Guid("96f4e9a4-9e2a-43ed-9f3d-d4cd10bf8b29"),
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsMain = true,
-                            PublicId = "PublicId3",
-                            Url = "https://media.gucci.com/style/DarkGray_Center_0_0_2400x2400/1714409103/414516_0AABG_1000_001_100_0000_Light-GG-Marmont-thin-belt.jpg"
-                        },
-                        new
-                        {
-                            Id = new Guid("6751da5c-e813-493b-898f-709fff047c58"),
-                            ClothingItemId = new Guid("6fbdeba4-dff9-4ce0-98dd-f6977b887b5c"),
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsMain = true,
-                            PublicId = "PublicId2",
-                            Url = "https://www.prada.com/content/dam/pradabkg_products/U/UJN/UJN815/1052F0002/UJN815_1052_F0002_S_221_SLF.jpg/_jcr_content/renditions/cq5dam.web.hebebed.1000.1000.jpg"
-                        },
-                        new
-                        {
-                            Id = new Guid("b3deabe2-fc6a-4fce-8e24-368562a87a26"),
-                            ClothingItemId = new Guid("041ec767-c1b2-4345-ab32-9283215cb9a9"),
-                            CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsMain = true,
-                            PublicId = "PublicId1",
-                            Url = "https://www.versace.com/dw/image/v2/BGWN_PRD/on/demandware.static/-/Sites-ver-master-catalog/default/dwf9d0b70e/original/90_1012141-1A11358_1B000_10_BaroccoDevorShirt-Shirts-Versace-online-store_0_2.jpg?sw=1200&q=85&strip=true"
                         });
                 });
 
@@ -537,7 +461,7 @@ namespace Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("317f5e82-061b-4552-b63f-7263d21e31c6"),
+                            Id = new Guid("3e71a7ec-d61a-43d0-a6f4-99060a7c84ef"),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DeliveryTime = "1-2 Days",
                             Description = "Fastest delivery time",
@@ -546,7 +470,7 @@ namespace Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("1a8b9a38-8f17-4b61-a40c-f820fd7f2b1b"),
+                            Id = new Guid("ab1f36a2-a026-4f89-b043-5025ffaa8d9c"),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DeliveryTime = "2-5 Days",
                             Description = "Get it within 5 days",
@@ -555,7 +479,7 @@ namespace Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("2ef34342-3146-484b-8305-eed2d5a1b318"),
+                            Id = new Guid("d89d77ed-b918-4023-ba81-87d0da2a2d3b"),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DeliveryTime = "5-10 Days",
                             Description = "Slower but cheap",
@@ -564,7 +488,7 @@ namespace Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = new Guid("3f14dff5-3e2f-4843-a386-6fcf5f234779"),
+                            Id = new Guid("5de7b5b2-f812-4224-8004-55f5de247504"),
                             CreatedAt = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DeliveryTime = "1-2 Weeks",
                             Description = "Free! You get what you pay for",
@@ -1051,17 +975,6 @@ namespace Infrastructure.Migrations
                     b.Navigation("ClothingBrand");
                 });
 
-            modelBuilder.Entity("Core.Entities.ClothingItemPhoto", b =>
-                {
-                    b.HasOne("Core.Entities.ClothingItem", "ClothingItem")
-                        .WithMany("ClothingItemPhotos")
-                        .HasForeignKey("ClothingItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ClothingItem");
-                });
-
             modelBuilder.Entity("Core.Entities.Comment", b =>
                 {
                     b.HasOne("Core.Entities.ClothingItem", "ClothingItem")
@@ -1224,6 +1137,10 @@ namespace Infrastructure.Migrations
                                 .HasColumnType("uniqueidentifier");
 
                             b1.Property<string>("ClothingItemName")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("PictureUrl")
                                 .IsRequired()
                                 .HasColumnType("nvarchar(max)");
 
@@ -1405,8 +1322,6 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Core.Entities.ClothingItem", b =>
                 {
-                    b.Navigation("ClothingItemPhotos");
-
                     b.Navigation("Comments");
 
                     b.Navigation("FavouriteItems");

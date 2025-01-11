@@ -103,7 +103,7 @@ namespace Application.Services
                 {
                     throw new NotFoundException($"Clothing item with ID '{itemDto.ClothingItemId}' not found.");
                 }
-                var itemOrdered = new ClothingItemOrdered(clothingItem.Id, clothingItem.Name, clothingItem.PictureUrl);
+                var itemOrdered = new ClothingItemOrdered(clothingItem.Id, clothingItem.Name, clothingItem.ClothingItemPhotos);
                 var orderItem = new OrderItem(itemOrdered, clothingItem.Price, itemDto.Quantity);
                 updatedOrderItems.Add(orderItem);
             }
@@ -138,7 +138,7 @@ namespace Application.Services
                 {
                     ClothingItemId = item.ItemOrdered.ClothingItemId,
                     ClothingItemName = item.ItemOrdered.ClothingItemName,
-                    PictureUrl = item.ItemOrdered.PictureUrl,
+                    PictureUrl = item.ItemOrdered.MainPictureUrl,
                     Price = item.Price,
                     Quantity = item.Quantity
                 }).ToList(),

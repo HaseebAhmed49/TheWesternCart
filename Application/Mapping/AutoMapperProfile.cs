@@ -17,8 +17,22 @@ namespace Application.Mapping
         {
             CreateMap<User, LoginDto>().ReverseMap();
             CreateMap<User, RegisterDto>().ReverseMap();
+
+            CreateMap<User, UserDto>()
+                .ForMember(dest => dest.PhotoUrl,
+                opt => opt.MapFrom(src => src.UserPhotos.FirstOrDefault(x => x.IsMain).Url));
+
             CreateMap<User, UserDto>()
                 .ForMember(dest => dest.Age, opt => opt.MapFrom(src => src.DateOfBirth.CalcuateAge()));
+
+            CreateMap<UserPhoto, UserPhotoDto>();
+            CreateMap<UserPhotoDto, UserPhoto>();
+
+            CreateMap<ClothingItem, ClothingItemDto>()
+                .ForMember(dest => dest.PictureUrl,
+                opt => opt.MapFrom(src => src.ClothingItemPhotos.FirstOrDefault(x => x.IsMain).Url));
+            CreateMap<ClothingItemPhoto, ClothingItemPhotoDto>();
+            CreateMap<ClothingItemPhotoDto, ClothingItemPhoto>();
                 
             CreateMap<ShippingAddress, AddressDto>().ReverseMap();
             CreateMap<AddressDto, AddressAggregate>();
@@ -31,11 +45,10 @@ namespace Application.Mapping
             CreateMap<OrderItem, OrderItemDto>()
                 .ForMember(d => d.ClothingItemId, o => o.MapFrom(s => s.ItemOrdered.ClothingItemId))
                 .ForMember(d => d.ClothingItemName, o => o.MapFrom(s => s.ItemOrdered.ClothingItemName))
-                .ForMember(d => d.PictureUrl, o => o.MapFrom(s => s.ItemOrdered.PictureUrl))
-                .ForMember(d => d.PictureUrl, o => o.MapFrom<OrderItemUrlResolver>());
+                .ForMember(d => d.PictureUrl, o => o.MapFrom(s => s.ItemOrdered.MainPictureUrl));
             
             CreateMap<Comment, CommentDto>()
-                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.Name))
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName))
                 .ReverseMap();
             
             CreateMap<Coupon, CouponDto>().ReverseMap();
@@ -45,13 +58,13 @@ namespace Application.Mapping
                 .ReverseMap();
             
             CreateMap<LikeDislike, LikeDislikeDto>()
-                .ForMember(dest => dest.UserDto.Name, opt => opt.MapFrom(src => src.User.Name))
+                .ForMember(dest => dest.UserDto.UserName, opt => opt.MapFrom(src => src.User.UserName))
                 .ReverseMap();
             
             CreateMap<Notification, NotificationDto>().ReverseMap();
             
             CreateMap<Rating, RatingDto>()
-                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.Name))
+                .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName))
                 .ReverseMap();
             
             CreateMap<WishList, WishListDto>().ReverseMap();

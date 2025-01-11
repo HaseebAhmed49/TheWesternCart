@@ -18,7 +18,8 @@ namespace Infrastructure.Configurations
                 .OnDelete(DeleteBehavior.Restrict);
             builder.HasOne(rating => rating.ClothingItem)
                 .WithMany(ci => ci.Ratings)
-                .HasForeignKey(rating => rating.ClothingItemId);
+                .HasForeignKey(rating => rating.ClothingItemId)
+                .OnDelete(DeleteBehavior.Cascade);
         }        
     }
 }

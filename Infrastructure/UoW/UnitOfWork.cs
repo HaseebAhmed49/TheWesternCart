@@ -27,6 +27,7 @@ namespace Infrastructure.UoW
         private INotificationRepository _notificationRepository;
         private IRatingRepository _ratingRepository;
         private IWishListRepository _wishListRepository;
+        private IPhotoRepository _photoRepository;
         private IUserRepository _userRepository;
 
         public UnitOfWork(
@@ -74,6 +75,9 @@ namespace Infrastructure.UoW
             _ratingRepository ??= new RatingRepository(_context);
         public IWishListRepository WishListRepository =>
             _wishListRepository ??= new WishListRepository(_context);
+
+        public IPhotoRepository PhotoRepository => 
+        _photoRepository ??= new PhotoRepository(_context);
         public IUserRepository UserRepository => _userRepository ??= new UserRepository(_context);
         public UserManager<User> UserManager => _userManager;
         public SignInManager<User> SignInManager => _signInManager;

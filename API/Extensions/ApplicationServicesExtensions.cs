@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Helpers;
 using Application.Interfaces;
 using Application.Mapping;
 using Application.Services;
@@ -35,6 +36,8 @@ namespace API.Extensions
                 var options = ConfigurationOptions.Parse(config.GetConnectionString("Redis"));
                 return ConnectionMultiplexer.Connect(options);
             });
+
+            services.Configure<CloudinarySettings>(config.GetSection("CloudinarySettings"));
 
             services.AddSingleton<IResponseCacheService, ResponseCacheService>();
             services.AddScoped<IBasketService, BasketService>();

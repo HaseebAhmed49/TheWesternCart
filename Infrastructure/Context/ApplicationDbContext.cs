@@ -34,6 +34,8 @@ namespace Infrastructure.Context
         public DbSet<OrderItemHistory> OrderItemHistories { get; set; }
         public DbSet<WishList> Wishlists { get; set; }
         public DbSet<WishListItem> WishlistItems { get; set; }
+        public DbSet<UserPhoto> UserPhotos { get; set; }
+        public DbSet<ClothingItemPhoto> ClothingItemPhotos { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -51,7 +53,8 @@ namespace Infrastructure.Context
             modelBuilder.ApplyConfiguration(new WishListItemConfiguration());
             modelBuilder.ApplyConfiguration(new OrderHistoryConfiguration());
             modelBuilder.ApplyConfiguration(new OrderItemHistoryConfiguration());
-
+            modelBuilder.ApplyConfiguration(new UserPhotoConfiguration());
+            modelBuilder.ApplyConfiguration(new ClothingItemConfiguration());
             SeedDataInitializer.ContextSeed(modelBuilder);
         }
 
