@@ -18,20 +18,25 @@ namespace Infrastructure.Configurations
                 a.WithOwner();
 
                 a.Property(sa => sa.AddressLine)
-                    .IsRequired()
+                    .IsRequired(false)
                     .HasMaxLength(200);
                 a.Property(sa => sa.City)
-                    .IsRequired()
+                    .IsRequired(false)
                     .HasMaxLength(100);
                 a.Property(sa => sa.State)
-                    .IsRequired()
+                    .IsRequired(false)
                     .HasMaxLength(100);
                 a.Property(sa => sa.PostalCode)
-                    .IsRequired()
+                    .IsRequired(false)
                     .HasMaxLength(20);
                 a.Property(sa => sa.Country)
-                    .IsRequired()
+                    .IsRequired(false)
                     .HasMaxLength(100);
+
+                a.Property(sa => sa.IsDefault)
+                    .IsRequired(false)
+                    .HasDefaultValue(false);
+
                 a.HasOne(sa => sa.User)
                     .WithOne(u => u.Address)
                     .HasForeignKey<ShippingAddress>(sa => sa.UserId)

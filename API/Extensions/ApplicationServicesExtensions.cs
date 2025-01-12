@@ -57,6 +57,7 @@ namespace API.Extensions
             services.AddScoped<IPaymentService, PaymentService>();
             services.AddScoped<IPhotoService, PhotoService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IClothingItemService, ClothingItemService>();
             return services;
         }

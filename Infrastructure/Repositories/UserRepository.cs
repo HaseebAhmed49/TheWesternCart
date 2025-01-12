@@ -19,9 +19,8 @@ namespace Infrastructure.Repositories
         public async Task<User?> GetUserByIdAsync(string userId)
         {
             return await _context.Users
-                .Include(u => u.UserRoles)
-                .ThenInclude(ur => ur.Role)
-                .Include(u => u.UserName)
+                .Include(u => u.UserRoles).ThenInclude(ur => ur.Role)
+                .Include(u => u.UserPhotos)
                 .Include(u => u.Address)
                 .Include(u => u.Orders)
                 .Include(u => u.OrderHistories)
@@ -36,9 +35,8 @@ namespace Infrastructure.Repositories
         public async Task<User?> GetUserByEmail(string email)
         {
             return await _context.Users
-                .Include(u => u.UserRoles)
-                .ThenInclude(ur => ur.Role)
-                .Include(u => u.UserName)
+                .Include(u => u.UserRoles).ThenInclude(ur => ur.Role)
+                .Include(u => u.UserPhotos)
                 .Include(u => u.Address)
                 .Include(u => u.Orders)
                 .Include(u => u.OrderHistories)
@@ -53,9 +51,8 @@ namespace Infrastructure.Repositories
         public async Task<User?> GetUserByUserName(string userName)
         {
             return await _context.Users
-                .Include(u => u.UserRoles)
-                .ThenInclude(ur => ur.Role)
-                .Include(u => u.UserName)
+                .Include(u => u.UserRoles).ThenInclude(ur => ur.Role)
+                .Include(u => u.UserPhotos)
                 .Include(u => u.Address)
                 .Include(u => u.Orders)
                 .Include(u => u.OrderHistories)
@@ -70,9 +67,8 @@ namespace Infrastructure.Repositories
         public async Task<IReadOnlyList<User>> GetAllUsersAsync()
         {
             return await _context.Users
-                .Include(u => u.UserRoles)
-                .ThenInclude(ur => ur.Role)
-                .Include(u => u.UserName)
+                .Include(u => u.UserRoles).ThenInclude(ur => ur.Role)
+                .Include(u => u.UserPhotos)
                 .Include(u => u.Address)
                 .Include(u => u.Orders)
                 .Include(u => u.OrderHistories)
@@ -88,8 +84,7 @@ namespace Infrastructure.Repositories
         {
             return await _context.Users
                 .Where(u => u.UserRoles.Any(ur => ur.RoleId == role.RoleId))
-                .Include(u => u.UserRoles)
-                .ThenInclude(ur => ur.Role)
+                .Include(u => u.UserRoles).ThenInclude(ur => ur.Role)
                 .Include(u => u.UserName)
                 .Include(u => u.Address)
                 .Include(u => u.Orders)
@@ -106,8 +101,8 @@ namespace Infrastructure.Repositories
         {
             return await _context.Users
                 .Where(u => u.UserName.Contains(name))
-                .Include(u => u.UserRoles)
-                .ThenInclude(ur => ur.Role)
+                .Include(u => u.UserRoles).ThenInclude(ur => ur.Role)
+                .Include(u => u.UserPhotos)
                 .Include(u => u.Address)
                 .Include(u => u.Orders)
                 .Include(u => u.OrderHistories)
