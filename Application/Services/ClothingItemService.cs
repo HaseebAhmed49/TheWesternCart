@@ -4,11 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Application.DTOs;
 using Application.Exceptions;
+using Application.Helpers;
 using Application.Services.Interfaces;
 using Application.UoW;
 using AutoMapper;
 using CloudinaryDotNet.Actions;
 using Core.Entities;
+using Core.Specifications;
 
 namespace Application.Services
 {
@@ -22,6 +24,29 @@ namespace Application.Services
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _photoService = photoService;
+        }
+
+        public async Task<ClothingItemDto> GetClothingItem(Guid clothingItemId)
+        {
+            var spec = new ClothingItemWithTypesAndBrandsSpecification(clothingItemId);
+            var clothingItem = await _unitOfWork.GenericRepository<ClothingItem>().GetEntityWithSpec(spec);
+            if (clothingItem == null) throw new  NotFoundException("ClothingItem not found.");
+            return _mapper.Map<ClothingItem, ClothingItemDto>(clothingItem);
+        }
+        public async Task<Pagination<ClothingItemDto>> GetClothingItems(ClothingSpecParams clothingSpecParamsParams)
+        {
+            var spec = new ClothingItemWithTypesAndBrandsSpecification(clothingSpecParamsParams);
+            var countSpec = new ClothingItemWithFiltersForCountSpecification(clothingSpecParamsParams);
+            var totalItems = await _unitOfWork.GenericRepository<ClothingItem>().CountAsync(countSpec);
+            var clothingItems = await _unitOfWork.GenericRepository<ClothingItem>().ListAsync(spec);
+            var data = _mapper
+                .Map<IReadOnlyList<ClothingItem>, IReadOnlyList<ClothingItemDto>>(clothingItems);
+            
+            return new Pagination<ClothingItemDto>(clothingSpecParamsParams.PageIndex, clothingSpecParamsParams.PageSize, totalItems, data);
+        }
+        public async Task<IReadOnlyList<ClothingBrand>> GetClothingBrands()
+        {
+            return await _unitOfWork.GenericRepository<ClothingBrand>().ListAllAsync();
         }
         
         public async Task<ClothingItemPhotoDto> AddPhotoByClothingItem(ImageUploadResult result, Guid clothingItemId)

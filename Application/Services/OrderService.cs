@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.DTOs;
 using Application.Exceptions;
 using Application.Interfaces;
 using Application.Services.Interfaces;
 using Application.UoW;
+using AutoMapper;
 using Core.Entities;
 using Core.Entities.OrderAggregate;
 using Core.Specifications;
@@ -16,11 +18,15 @@ namespace Application.Services
     {
         private readonly IBasketService _basketService;
         private readonly IUnitOfWork _unitOfWork;
-        public OrderService(IBasketService basketService, IUnitOfWork unitOfWork)
+        private readonly IOrderHistoryService _orderHistoryService;
+        private readonly IMapper _mapper;  
+        public OrderService(IBasketService basketService, IUnitOfWork unitOfWork, 
+            IOrderHistoryService orderHistoryService, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
-            _basketService = basketService;   
-            
+            _basketService = basketService;               
+            _orderHistoryService = orderHistoryService;
+            _mapper = mapper;
         }
         public async Task<Order> CreateOrderAsync(string buyerEmail, Guid deliveryMethodId, string basketId,
             AddressAggregate shippingAddress)
@@ -68,6 +74,15 @@ namespace Application.Services
             {
                 throw new InternalServerException("Failed to save the order.");
             }  
+
+
+            var orderDto = new OrderDto
+            {
+                BasketId = basketId,
+                DeliveryMethodId = deliveryMethodId,
+                ShipToAddress = _mapper.Map<AddressDto>(shippingAddress)
+            };
+            await _orderHistoryService.CreateOrderHistoryAsync(orderDto);
             return order;
         }
         public async Task<IReadOnlyList<DelieveryMethod>> GetDeliveryMethodsAsync()
