@@ -13,7 +13,5 @@ namespace Application.Services.Interfaces
         Task<IEnumerable<object>> GetRoles();
         Task<bool> AddRole(string roleName);
         Task<bool> DeleteRole(string roleName);        
-        Task<OrderDto> EditUserOrderAsync(Guid orderId, OrderUpdateDto orderUpdateDto);
-        Task<IReadOnlyList<OrderToReturnDto>> GetOrdersByUserEmailAsync(string buyerEmail);
     }
 }

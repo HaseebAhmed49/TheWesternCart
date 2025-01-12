@@ -11,3 +11,4 @@ API/.DS_Store
 API/appsettings.json
 API/appsettings.Development.json
 .vs
+.idea/
