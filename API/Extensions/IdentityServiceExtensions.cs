@@ -21,18 +21,22 @@ namespace API.Extensions
                 .AddRoleManager<RoleManager<AppRole>>()
                 .AddSignInManager<SignInManager<User>>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuerSigningKey = true,
+
+            services.AddAuthentication(options => {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+                    { options.TokenValidationParameters = new TokenValidationParameters
+                        {
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Token:Key"])),
                         ValidIssuer = config["Token:Issuer"],
+                        ValidAudience = config["Token:Audience"],
                         ValidateIssuer = true,
-                        ValidateAudience = false,
+                        ValidateAudience = true,
                         ValidateLifetime = true,
-                        ClockSkew = TimeSpan.FromMinutes(10)
+                        ClockSkew = TimeSpan.FromMinutes(10),
+                        ValidateIssuerSigningKey = true
                     };
                     options.Events = new JwtBearerEvents
                     {
@@ -52,6 +56,8 @@ namespace API.Extensions
             {
                 opt.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Administrator"));
             });
+
+            services.AddControllers();
             return services;
         }
         

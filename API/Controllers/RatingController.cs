@@ -37,7 +37,7 @@ namespace API.Controllers
                 return StatusCode(500, new ApiResponse(500, "An error occurred while processing your request"));
             }
         }
-        [HttpGet("{clothingItemId}")]
+        [HttpGet("{clothing/clothingItemId/average}")]
         public async Task<ActionResult<double?>> GetAverageRating(Guid clothingItemId)
         {
             try
@@ -55,7 +55,7 @@ namespace API.Controllers
         {
             try
             {
-                await _ratingService.UpdateRatingAsync (ratingDto);
+                await _ratingService.UpdateRatingAsync(ratingDto);
                 return Ok();
             }
             catch (Exception ex)
