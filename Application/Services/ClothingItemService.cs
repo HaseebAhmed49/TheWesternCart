@@ -26,23 +26,23 @@ namespace Application.Services
             _photoService = photoService;
         }
 
-        public async Task<ClothingItemDto> GetClothingItem(Guid clothingItemId)
+        public async Task<ClothingItemDto> GetClothingItemById(Guid clothingItemId)
         {
             var spec = new ClothingItemWithTypesAndBrandsSpecification(clothingItemId);
             var clothingItem = await _unitOfWork.GenericRepository<ClothingItem>().GetEntityWithSpec(spec);
             if (clothingItem == null) throw new  NotFoundException("ClothingItem not found.");
             return _mapper.Map<ClothingItem, ClothingItemDto>(clothingItem);
         }
-        public async Task<Pagination<ClothingItemDto>> GetClothingItems(ClothingSpecParams clothingSpecParamsParams)
+        public async Task<Pagination<ClothingItemDto>> GetClothingItems(ClothingSpecParams clothingSpecParams)
         {
-            var spec = new ClothingItemWithTypesAndBrandsSpecification(clothingSpecParamsParams);
-            var countSpec = new ClothingItemWithFiltersForCountSpecification(clothingSpecParamsParams);
+            var spec = new ClothingItemWithTypesAndBrandsSpecification(clothingSpecParams);
+            var countSpec = new ClothingItemWithFiltersForCountSpecification(clothingSpecParams);
             var totalItems = await _unitOfWork.GenericRepository<ClothingItem>().CountAsync(countSpec);
             var clothingItems = await _unitOfWork.GenericRepository<ClothingItem>().ListAsync(spec);
             var data = _mapper
                 .Map<IReadOnlyList<ClothingItem>, IReadOnlyList<ClothingItemDto>>(clothingItems);
             
-            return new Pagination<ClothingItemDto>(clothingSpecParamsParams.PageIndex, clothingSpecParamsParams.PageSize, totalItems, data);
+            return new Pagination<ClothingItemDto>(clothingSpecParams.PageIndex, clothingSpecParams.PageSize, totalItems, data);
         }
         public async Task<IReadOnlyList<ClothingBrand>> GetClothingBrands()
         {

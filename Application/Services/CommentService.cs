@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Application.DTOs;
 using Application.Exceptions;
+using Application.Extensions;
 using Application.Services.Interfaces;
 using Application.UoW;
 using AutoMapper;
@@ -47,7 +48,12 @@ namespace Application.Services
             {
                 throw new NotFoundException("No comments found for this clothing item.");
             }
-            return _mapper.Map<IEnumerable<CommentDto>>(comments);
+            var commentDtos = _mapper.Map<IEnumerable<CommentDto>>(comments);
+            foreach (var commentDto in commentDtos)
+            {
+                commentDto.TimeAgo = commentDto.CreatedAt.DateTimeAgo();
+            }
+            return commentDtos;
         }
         public async Task<IEnumerable<CommentDto>> GetCommentsByUserIdAsync(string userId)
         {
@@ -56,8 +62,12 @@ namespace Application.Services
             {
                 throw new NotFoundException("No comments found for this user.");
             }
-            return _mapper.Map<IEnumerable<CommentDto>>(comments);
-        }
-        
+            var commentDtos = _mapper.Map<IEnumerable<CommentDto>>(comments);
+            foreach (var commentDto in commentDtos)
+            {
+                commentDto.TimeAgo = commentDto.CreatedAt.DateTimeAgo();
+            }
+            return commentDtos;
+        }        
     }
 }

@@ -12,6 +12,7 @@ namespace Application.DTOs
         public string UserName { get; set; }
         public string UserId { get; set; }
         public DateTime CreatedAt { get; set; }
+        public string? TimeAgo { get; set; }
         public List<LikeDislikeDto> LikesDislikes { get; set; }
     }
 }
