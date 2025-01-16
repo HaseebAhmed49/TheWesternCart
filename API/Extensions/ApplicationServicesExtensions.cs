@@ -33,7 +33,7 @@ namespace API.Extensions
 
             services.AddSingleton<IConnectionMultiplexer>(c =>
             {
-                var options = ConfigurationOptions.Parse(config.GetConnectionString("Redis"), true);
+                var options = ConfigurationOptions.Parse(config.GetConnectionString("RedisLocalDb"), false);
                 return ConnectionMultiplexer.Connect(options);
             });
 
