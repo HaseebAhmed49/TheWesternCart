@@ -10,5 +10,6 @@ namespace Core.Interfaces
     {
         Task<IReadOnlyList<WishList>> GetWishListsByUserIdAsync(string userId);
         Task<WishList?> GetWishListByNameAsync(string userId, string name);
+        Task<IReadOnlyList<WishList>> GetWishlistsByClothingItemIdAsync(Guid clothingItemId);
     }
 }

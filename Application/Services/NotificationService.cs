@@ -20,6 +20,17 @@ namespace Application.Services
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
+
+        public async Task NotifyUserAboutDiscountAsync(string userId, Guid clothingItemId)
+        {
+            var notification = new Notification
+            {
+                Text = "Item in your wishlist has a discount!",
+                UserId = userId,
+                IsRead = false
+            };
+            await _unitOfWork.NotificationRepository.AddNotificationAsync(notification);
+        }
         public async Task AddNotificationAsync(NotificationDto notificationDto)
         {
             if (notificationDto == null)

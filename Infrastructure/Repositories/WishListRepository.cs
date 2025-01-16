@@ -28,5 +28,13 @@ namespace Infrastructure.Repositories
                 .Wishlists.Include(w => w.Items)
                 .FirstOrDefaultAsync(w => w.UserId == userId && w.Name == name);
         }
+
+        public async Task<IReadOnlyList<WishList>> GetWishlistsByClothingItemIdAsync(Guid clothingItemId)
+        {
+            return await _context.Wishlists
+                .Where(w => w.Items.Any(i => i.ClothingItemId == clothingItemId))
+                .Include(w => w.Items)
+                .ToListAsync();
+        }
     }
 }

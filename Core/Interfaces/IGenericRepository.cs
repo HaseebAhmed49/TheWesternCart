@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Core.Common;
 using Core.Specifications.Interfaces;
@@ -21,5 +22,7 @@ namespace Core.Interfaces
         Task AddAsync(T entity);
         Task UpdateAsync(T entity);
         Task RemoveAsync(T entity);
+
+        Task<T> GetByConditionAsync(Expression<Func<T, bool>> predicate);
     }
 }

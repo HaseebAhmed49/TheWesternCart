@@ -37,7 +37,7 @@ namespace API.Controllers
                 return StatusCode(500, new ApiResponse(500, "An error occurred while processing your request"));
             }
         }
-        [HttpGet("{clothing/clothingItemId/average}")]
+        [HttpGet("clothing/clothingItemId/average")]
         public async Task<ActionResult<double?>> GetAverageRating(Guid clothingItemId)
         {
             try
