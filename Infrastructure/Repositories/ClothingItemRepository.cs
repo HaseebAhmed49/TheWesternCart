@@ -84,5 +84,16 @@ namespace Infrastructure.Repositories
             }
             return await query.Include(c => c.ClothingBrand).ToListAsync();
         }
+
+        public async Task<IReadOnlyList<ClothingItem>> GetAllClothingItemsAsync()
+        {
+            return await _context.ClothingItems
+                .Include(c => c.ClothingBrand)
+                .Include(c => c.ClothingItemPhotos)
+                .Include(c => c.Ratings)
+                .Include(c => c.Comments)
+                .Include(c => c.FavouriteItems)
+                .ToListAsync();
+        }
     }
 }

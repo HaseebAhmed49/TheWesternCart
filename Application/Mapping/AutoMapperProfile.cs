@@ -27,8 +27,10 @@ namespace Application.Mapping
             CreateMap<UserPhotoDto, UserPhoto>();
 
             CreateMap<ClothingItem, ClothingItemDto>()
-                .ForPath(dest => dest.PictureUrl,
-                opt => opt.MapFrom(src => src.ClothingItemPhotos.FirstOrDefault(x => x.IsMain).Url));
+                .ForMember(dest => dest.PictureUrl,
+                opt => opt.MapFrom(src => src.ClothingItemPhotos.FirstOrDefault(x => x.IsMain).Url))
+                .ForMember(dest => dest.Brand, opt => opt.MapFrom(src => src.ClothingBrand.Name));
+
             CreateMap<ClothingItemPhoto, ClothingItemPhotoDto>();
             CreateMap<ClothingItemPhotoDto, ClothingItemPhoto>();
                 
@@ -76,6 +78,8 @@ namespace Application.Mapping
             CreateMap<DateTime, DateTime>().ConvertUsing(d => DateTime.SpecifyKind(d, DateTimeKind.Utc));
             CreateMap<DateTime?, DateTime?>()
                 .ConvertUsing(d => d.HasValue ? DateTime.SpecifyKind(d.Value, DateTimeKind.Utc) : null);
+
+            CreateMap<ClothingBrand, ClothingBrandDto>().ReverseMap();
         }
         
     }

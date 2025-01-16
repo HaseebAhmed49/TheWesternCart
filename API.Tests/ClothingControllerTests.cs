@@ -6,6 +6,7 @@ using API.Controllers;
 using Application.DTOs;
 using Application.Helpers;
 using Application.Services.Interfaces;
+using AutoMapper;
 using Core.Entities;
 using Core.Specifications;
 using Microsoft.AspNetCore.Mvc;
@@ -17,9 +18,16 @@ namespace API.Tests
     {
         private readonly Mock<IClothingItemService> _mockClothingItemService;
         private readonly ClothingController _controller;
+        private readonly IMapper _mapper;
         public ClothingControllerTests()
         {
             _mockClothingItemService = new Mock<IClothingItemService>();
+
+            var config = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<ClothingBrand, ClothingBrandDto>().ReverseMap();
+            });
+            _mapper = config.CreateMapper();
             _controller = new ClothingController(_mockClothingItemService.Object);
         }
         [Fact]
@@ -83,15 +91,20 @@ namespace API.Tests
         public async Task GetClothingBrandS_ReturnsOkResult_WhenBrandsExist()
         {
             // Arrange
-            var clothingBrands = new List<ClothingBrand> { new ClothingBrand { Id = Guid.NewGuid(), Name = "Test Brand" } };
+            var clothingBrands = new List<ClothingBrand>
+            {
+                new ClothingBrand { Id = Guid.NewGuid(), Name = "Test Brand" }
+            };
+            var clothingBrandDtos = _mapper.Map<IReadOnlyList<ClothingBrandDto>>(clothingBrands);
             _mockClothingItemService.Setup(service => service.GetClothingBrands())
-                .ReturnsAsync(clothingBrands);
+                .ReturnsAsync(clothingBrandDtos);
             // Act
             var result = await _controller.GetClothingBrandS();
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result.Result);
-            var returnValue = Assert.IsType<List<ClothingBrand>>(okResult.Value);
+            var returnValue = Assert.IsType<List<ClothingBrandDto>>(okResult.Value);
             Assert.Single(returnValue);
+            Assert.Equal(clothingBrandDtos[0].Name, returnValue[0].Name);
         }
         [Fact]
         public async Task GetClothingBrandS_ReturnsBadRequest_WhenExceptionThrown()

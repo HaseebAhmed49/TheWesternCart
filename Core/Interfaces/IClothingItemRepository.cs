@@ -17,5 +17,7 @@ namespace Core.Interfaces
         Task<IReadOnlyList<ClothingItem>> GetClothingByCategoryAsync(Category category);
         Task<IReadOnlyList<ClothingItem>> GetClothingByFiltersAsync(Gender? gender = null, Size? size = null,
             Category? category = null);
+
+        Task<IReadOnlyList<ClothingItem>> GetAllClothingItemsAsync();
     }
 }

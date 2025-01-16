@@ -10,5 +10,11 @@
     &lt;ProjectFile&gt;B0989C2C-FA09-4C01-810E-AB74CD5D3198/f:CommentsControllerTests.cs&lt;/ProjectFile&gt;
     &lt;ProjectFile&gt;B0989C2C-FA09-4C01-810E-AB74CD5D3198/f:LikesControllerTests.cs&lt;/ProjectFile&gt;
     &lt;ProjectFile&gt;B0989C2C-FA09-4C01-810E-AB74CD5D3198/f:WishListControllerTests.cs&lt;/ProjectFile&gt;
+    &lt;ProjectFile&gt;B0989C2C-FA09-4C01-810E-AB74CD5D3198/f:ClothingControllerTests.cs&lt;/ProjectFile&gt;
+    &lt;ProjectFile&gt;B0989C2C-FA09-4C01-810E-AB74CD5D3198/f:AdminControllerTests.cs&lt;/ProjectFile&gt;
+    &lt;ProjectFile&gt;B0989C2C-FA09-4C01-810E-AB74CD5D3198/f:FavouritesControllerTests.cs&lt;/ProjectFile&gt;
+    &lt;ProjectFile&gt;B0989C2C-FA09-4C01-810E-AB74CD5D3198/f:NotificationsControllerTests.cs&lt;/ProjectFile&gt;
+    &lt;ProjectFile&gt;B0989C2C-FA09-4C01-810E-AB74CD5D3198/f:PhotosControllerTests.cs&lt;/ProjectFile&gt;
+    &lt;ProjectFile&gt;B0989C2C-FA09-4C01-810E-AB74CD5D3198/f:UsersControllerTests.cs&lt;/ProjectFile&gt;
   &lt;/Or&gt;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

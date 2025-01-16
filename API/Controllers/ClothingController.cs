@@ -10,6 +10,7 @@ using Application.Helpers;
 using Application.Services.Interfaces;
 using Core.Entities;
 using Core.Specifications;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -53,11 +54,56 @@ namespace API.Controllers
         }
         [Cached(600)]
         [HttpGet("brands")]
-        public async Task<ActionResult<IReadOnlyList<ClothingBrand>>> GetClothingBrandS()
+        public async Task<ActionResult<IReadOnlyList<ClothingBrandDto>>> GetClothingBrandS()
         {
             try
             {
                 return Ok(await _clothingItemService.GetClothingBrands());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize(Policy = "RequireAdminRole")]
+        [HttpPost("brands")]
+        public async Task<ActionResult> AddClothingBrandAsync([FromBody] ClothingBrandDto clothingBrandDto)
+        {
+            try
+            {
+                await _clothingItemService.AddClothingBrandAsync(clothingBrandDto);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        
+        [Authorize(Policy = "RequireAdminRole")]
+        [HttpPost("items")]
+        public async Task<ActionResult> AddClothingItemAsync([FromBody] ClothingItemDto clothingItemDto)
+        {
+            try
+            {
+                await _clothingItemService.AddClothingItemAsync(clothingItemDto);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        
+        [Authorize(Policy = "RequireAdminRole")]
+        [HttpGet("all")]
+        public async Task<ActionResult<IReadOnlyList<ClothingItemDto>>> GetAllClothingItems()
+        {
+            try
+            {
+                var clothingItems = await _clothingItemService.GetAllClothingItemsAsync();
+                return Ok(clothingItems);
             }
             catch (Exception ex)
             {

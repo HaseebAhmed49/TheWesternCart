@@ -44,9 +44,10 @@ namespace Application.Services
             
             return new Pagination<ClothingItemDto>(clothingSpecParams.PageIndex, clothingSpecParams.PageSize, totalItems, data);
         }
-        public async Task<IReadOnlyList<ClothingBrand>> GetClothingBrands()
+        public async Task<IReadOnlyList<ClothingBrandDto>> GetClothingBrands()
         {
-            return await _unitOfWork.GenericRepository<ClothingBrand>().ListAllAsync();
+            var brands = await _unitOfWork.GenericRepository<ClothingBrand>().ListAllAsync();
+            return _mapper.Map<IReadOnlyList<ClothingBrandDto>>(brands);
         }
         
         public async Task<ClothingItemPhotoDto> AddPhotoByClothingItem(ImageUploadResult result, Guid clothingItemId)
@@ -87,6 +88,25 @@ namespace Application.Services
             clothingItem.ClothingItemPhotos.Remove(photo);
             await _unitOfWork.SaveAsync();
         }
+
+        public async Task AddClothingBrandAsync(ClothingBrandDto clothingBrandDto)
+        {
+            var clothingBrand = _mapper.Map<ClothingBrand>(clothingBrandDto);
+            await _unitOfWork.GenericRepository<ClothingBrand>().AddAsync(clothingBrand);
+            await _unitOfWork.SaveAsync();
+        }
         
+        public async Task AddClothingItemAsync(ClothingItemDto clothingItemDto)
+        {
+            var clothingItem = _mapper.Map<ClothingItem>(clothingItemDto);
+            await _unitOfWork.GenericRepository<ClothingItem>().AddAsync(clothingItem);
+            await _unitOfWork.SaveAsync();
+        }
+        
+        public async Task<IReadOnlyList<ClothingItemDto>> GetAllClothingItemsAsync()
+        {
+            var clothingItems = await _unitOfWork.ClothingItemRepository.GetAllClothingItemsAsync();
+            return _mapper.Map<IReadOnlyList<ClothingItemDto>>(clothingItems);
+        }        
     }
 }
