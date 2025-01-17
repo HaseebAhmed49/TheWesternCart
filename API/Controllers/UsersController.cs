@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using API.Extensions;
 using Application.DTOs;
 using Application.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -78,6 +79,37 @@ namespace API.Controllers
             {
                 var users = await _userService.SearchUsersByNameAsync(name);
                 return Ok(users);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize]
+        [HttpGet("address")]
+        public async Task<ActionResult<AddressDto>> GetUserAddress()
+        {
+            try
+            {
+                var userName = User.GetUserName();
+                var adressDto = await _userService.GetUserAddress(userName);
+                return Ok(adressDto);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [Authorize]
+        [HttpPut("address")]
+        public async Task<ActionResult<AddressDto>> UpdateUserAddress(AddressDto address)
+        {
+            try
+            {
+                var userName = User.GetUserName();
+                var adressDto = await _userService.UpdateUserAddress(address, userName);
+                return Ok(adressDto);
             }
             catch (Exception ex)
             {

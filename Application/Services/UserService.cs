@@ -23,6 +23,26 @@ namespace Application.Services
             _mapper = mapper;
             _photoService = photoService;
         }
+
+        public async Task<AddressDto> GetUserAddress(string userName)
+        {
+            var user = await _unitOfWork.UserRepository.GetUserByUserName(userName);
+            if (user == null) throw new NotFoundException("Not Found!");
+            return _mapper.Map<ShippingAddress, AddressDto>(user.Address);
+        }
+        public async Task<AddressDto> UpdateUserAddress(AddressDto address, string userName)
+        {
+            var user = await _unitOfWork.UserRepository.GetUserByUserName(userName);
+            if (user == null) throw new NotFoundException("Not Found!");
+            user.Address = _mapper.Map<AddressDto, ShippingAddress>(address);
+            var result = await _unitOfWork.UserManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                throw new Exception("Failed to update user address");
+            }
+            return _mapper.Map<AddressDto>(user.Address);
+        }
+
         public async Task<UserDto> GetUserByUsernameAsync(string userName)
         {
             var user = await _unitOfWork.UserRepository.GetUserByUserName(userName);
