@@ -12,3 +12,5 @@ API/appsettings.json
 API/appsettings.Development.json
 .vs
 .idea/
+Client.SPA/ssl/server.cert
+Client.SPA/ssl/server.key
