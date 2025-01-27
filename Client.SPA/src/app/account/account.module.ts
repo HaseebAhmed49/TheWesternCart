@@ -9,8 +9,7 @@ import { MatCardContent, MatCardModule } from '@angular/material/card';
 
 @NgModule({
   declarations: [
-    LoginComponent,
-    RegisterComponent
+    
   ],
   imports: [
     CommonModule,

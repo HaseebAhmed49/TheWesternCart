@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {environment} from '../../environments/environment';
 import {User} from '../shared/models/user';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {ReplaySubject} from 'rxjs';
 import {map, catchError} from 'rxjs/operators';
 import {Router} from '@angular/router';
@@ -79,8 +79,9 @@ export class AccountService {
     );
   }
   checkEmailExists(email: string) {
-    return this.http.get<boolean>(this.baseUrl + 'account/check-email-exists?email=' + email).pipe(
-      catchError(error => {
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${this.getTokenFromLocalStorage()}`);
+    return this.http.get<boolean>(this.baseUrl + 'account/check-email-exists?email=' + email, { headers }).pipe(
+    catchError(error => {
         console.error('Check email exists error', error);
         throw error;
       })

@@ -4,11 +4,13 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AccountService } from '../account.service';
 import { debounceTime, finalize, map, switchMap, take } from 'rxjs/operators';
-import { MatOption, MatOptionModule } from '@angular/material/core';
+import { MatNativeDateModule, MatOption, MatOptionModule } from '@angular/material/core';
 import { MatError, MatFormField, MatLabel, MatSelect, MatSelectModule } from '@angular/material/select';
 import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
 
 
 @Component({
@@ -24,9 +26,12 @@ import { CommonModule } from '@angular/common';
     MatSelect,
     MatSelectModule,
     MatDatepickerModule,
+    MatNativeDateModule,
     MatFormField,
     MatCard,
     MatCardContent,
+    MatFormFieldModule,
+    MatInput
   ],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.sass']

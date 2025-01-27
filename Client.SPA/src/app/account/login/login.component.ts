@@ -8,6 +8,8 @@ import { MatError, MatFormField, MatLabel, MatSelect, MatSelectModule } from '@a
 import { MatDatepicker } from '@angular/material/datepicker';
 import { MatCardContent, MatCardModule } from '@angular/material/card';
 import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
 @Component({
   selector: 'app-login',
   imports:[
@@ -18,7 +20,9 @@ import { CommonModule } from '@angular/common';
       MatOptionModule,
       MatFormField,
       MatCardModule,
-      MatCardContent,      
+      MatCardContent,
+      MatFormFieldModule,
+      MatInput
     ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.sass']
