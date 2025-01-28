@@ -6,13 +6,16 @@ import { SharedModule } from '../shared/shared.module';
 import { MatOption } from '@angular/material/core';
 import { MatError, MatFormField, MatLabel, MatSelectModule } from '@angular/material/select';
 import { MatCardContent, MatCardModule } from '@angular/material/card';
+import { AccountRoutingModule } from './account-routing.module';
 
 @NgModule({
-  declarations: [
-    
-  ],
+  // declarations: [
+  //   LoginComponent,
+  //   RegisterComponent    
+  // ],
   imports: [
     CommonModule,
+    AccountRoutingModule,
     SharedModule,
     MatOption,
     MatSelectModule,

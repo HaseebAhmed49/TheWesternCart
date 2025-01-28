@@ -4,7 +4,7 @@ import { BasketService } from '../../basket/basket.service';
 import { BasketItem } from '../../shared/models/basket';
 import { MaterialModule } from '../../shared/modules/material/material.module';
 import { CommonModule } from '@angular/common';
-import { RouterLinkActive } from '@angular/router';
+import { RouterLinkActive, RouterModule } from '@angular/router';
 import { HasRoleDirective } from '../directives/has-role.directive';
 
 @Component({
@@ -12,7 +12,7 @@ import { HasRoleDirective } from '../directives/has-role.directive';
     imports: [
       MaterialModule,
       CommonModule,
-      RouterLinkActive,
+      RouterModule,
       HasRoleDirective
     ],
   templateUrl: './nav-bar.component.html',
