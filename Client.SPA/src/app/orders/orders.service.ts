@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Order } from '../shared/models/order';
+import { Order, OrderUpdateDto } from '../shared/models/order';
 import { environment } from '../../environments/environment';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,5 +16,14 @@ export class OrdersService {
   }
   getOrderDetailed(id: number) {
     return this.http.get<Order>(this.baseUrl + 'orders/' + id);
+  }
+  
+  getOrdersByUserEmail(userName: string): Observable<Order[]> {
+    return this.http.get<Order[]>(`${this.baseUrl}orders/user-orders`, {
+      params: { userName }
+    });
+  }
+  updateUserOrder(orderId: string, orderUpdateDto: OrderUpdateDto): Observable<Order> {
+    return this.http.put<Order>(`${this.baseUrl}orders/${orderId}`, orderUpdateDto);
   }
 }
