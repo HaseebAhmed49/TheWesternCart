@@ -3,8 +3,13 @@ import { LoginComponent } from './account/login/login.component';
 import { RegisterComponent } from './account/register/register.component';
 import { NgModule } from '@angular/core';
 import { authGuard } from './core/guards/auth.guard';
+import { HomeComponent } from './home/home.component';
 
 export const routes: Routes = [
+  {path: '', component: HomeComponent, data: {breadcrumb: 'Home'}},
+  {path: 'basket', loadChildren: () => import('./basket/basket.module').then(m => m.BasketModule),
+    data: {breadcrumb: 'Basket'}
+  },
   {
     path: 'orders',
     canActivate: [authGuard],

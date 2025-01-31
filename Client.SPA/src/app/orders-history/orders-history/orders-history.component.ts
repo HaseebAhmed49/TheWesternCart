@@ -1,10 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { OrdersHistoryService } from '../orders-history.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { OrderHistory } from '../../shared/models/order-history';
+import { CommonModule } from '@angular/common';
+import { MaterialModule } from '../../shared/modules/material/material.module';
+import { SharedModule } from '../../shared/shared.module';
 
 @Component({
   selector: 'app-orders-history',
+  imports: [
+    CommonModule,
+    MaterialModule,
+    SharedModule,
+    RouterModule
+  ],
   templateUrl: './orders-history.component.html',
   styleUrls: ['./orders-history.component.sass']
 })

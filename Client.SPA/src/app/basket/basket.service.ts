@@ -95,7 +95,7 @@ export class BasketService {
   }
   private mapProductItemToBasketItem(item: ClothingItem): BasketItem {
     return {
-      id: item.id,
+      id: item.id.toString(),
       clothingName: item.name,
       price: item.price,
       quantity: 0,

@@ -11,10 +11,12 @@ import { FileUploadModule } from 'ng2-file-upload';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TimeagoModule } from 'ngx-timeago';
 import { CoreModule } from './core/core.module';
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
   declarations: [
-    AppComponent  // Declare your root component
+    AppComponent,  // Declare your root component
+    HomeComponent
   ],
   imports: [
     BrowserModule,  // Required for running Angular in the browser

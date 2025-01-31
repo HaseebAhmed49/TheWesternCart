@@ -16,4 +16,5 @@ import { OrdersHistoryComponent } from './orders-history/orders-history.componen
     OrdersHistoryRoutingModule
   ]
 })
+
 export class OrdersHistoryModule { }
