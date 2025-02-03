@@ -1,7 +1,7 @@
 import { Guid } from "guid-typescript";
 
 export interface OrderHistory {
-    id: Guid;
+    id: string;
     orderDate: Date;
     totalAmount: number;
     status: string;
@@ -9,7 +9,7 @@ export interface OrderHistory {
     orderItemsHisory: OrderItemHistory[];
   }
   export interface OrderItemHistory {
-    id: Guid;
+    id: string;
     clothingItemId: string;
     clothingItemName: string;
     quantity: number;

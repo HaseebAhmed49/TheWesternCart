@@ -2,7 +2,7 @@ import { Guid } from "guid-typescript";
 import { LikeDislike } from "./like-dislike";
 
 export interface Comment {
-  id: Guid;
+  id: string;
   text: string;
   username: string;
   userId: string;

@@ -7,7 +7,12 @@ import { HomeComponent } from './home/home.component';
 
 export const routes: Routes = [
   {path: '', component: HomeComponent, data: {breadcrumb: 'Home'}},
-  {path: 'basket', loadChildren: () => import('./basket/basket.module').then(m => m.BasketModule),
+  {
+    path: 'shop', loadChildren: () => import('./shop/shop.module').then(m => m.ShopModule),
+    data: {breadcrumb: 'Shop'}
+  },
+  {
+    path: 'basket', loadChildren: () => import('./basket/basket.module').then(m => m.BasketModule),
     data: {breadcrumb: 'Basket'}
   },
   {

@@ -4,6 +4,6 @@ import { User } from "./user";
 export interface FavoriteItem {
   userId: string;
   user: User;
-  clothingItemId: Guid;
+  clothingItemId: string;
   clothingItem: ClothingItem;
 }

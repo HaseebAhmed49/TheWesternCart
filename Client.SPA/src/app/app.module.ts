@@ -12,11 +12,15 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TimeagoModule } from 'ngx-timeago';
 import { CoreModule } from './core/core.module';
 import { HomeComponent } from './home/home.component';
+import { RatingComponent } from './rating/rating.component';
+import { FavouritesComponent } from './favourites/favourites.component';
 
 @NgModule({
   declarations: [
     AppComponent,  // Declare your root component
-    HomeComponent
+    HomeComponent,
+    RatingComponent,
+    FavouritesComponent
   ],
   imports: [
     BrowserModule,  // Required for running Angular in the browser

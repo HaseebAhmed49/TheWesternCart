@@ -1,3 +1,5 @@
+import { Guid } from "guid-typescript";
+
 export interface ClothingParams {
     pageIndex: number;
     pageSize: number;
@@ -32,7 +34,7 @@ export interface ClothingParams {
   }
   export class ClothingParams implements ClothingParams {
     pageIndex = 1;
-    pageSize = 6;
+    pageSize = 3;
     maxPageSize = 50;
     clothingBrandId?: string;
     gender?: Gender;

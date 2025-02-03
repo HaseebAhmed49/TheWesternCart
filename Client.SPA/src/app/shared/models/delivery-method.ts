@@ -5,5 +5,5 @@ export interface DeliveryMethod {
     deliveryTime: string;
     description: string;
     price: number;
-    id: Guid;
+    id: string;
   }

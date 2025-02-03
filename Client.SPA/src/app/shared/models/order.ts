@@ -6,7 +6,7 @@ export interface OrderToCreate {
   shipToAddress: Address;
 }
 export interface OrderItem {
-  clothingItemId: Guid;
+  clothingItemId: string;
   clothingItemName: string;
   pictureUrl: string;
   price: number;
