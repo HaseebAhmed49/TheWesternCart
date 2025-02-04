@@ -96,7 +96,7 @@ namespace API.Controllers
             }
         }
         
-        [Authorize(Policy = "RequireAdminRole")]
+        // [Authorize(Policy = "RequireAdminRole")]
         [HttpGet("all")]
         public async Task<ActionResult<IReadOnlyList<ClothingItemDto>>> GetAllClothingItems()
         {

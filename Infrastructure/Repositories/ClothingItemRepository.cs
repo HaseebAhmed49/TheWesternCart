@@ -10,19 +10,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
 {
-    public class ClothingItemRepository : IClothingItemRepository
+    public class ClothingItemRepository : GenericRepository<ClothingItem>,IClothingItemRepository
     {
-        private readonly ApplicationDbContext _context;
-
-        public ClothingItemRepository(ApplicationDbContext context)
+        public ClothingItemRepository(ApplicationDbContext context): base(context)
         {
-            _context = context;
         }
 
         public async Task<ClothingItem> GetClothingByIdAsync(Guid id)
         {
-            return await _context
-                .ClothingItems.Include(c => c.ClothingBrand)
+            return await _context.ClothingItems
+                .Include(c => c.ClothingItemPhotos)
+                .Include(c => c.ClothingBrand)
                 .Include(c => c.Ratings)
                 .Include(c => c.Comments)
                 .Include(c => c.FavouriteItems)
@@ -31,7 +29,10 @@ namespace Infrastructure.Repositories
 
         public async Task<IReadOnlyList<ClothingItem>> GetClothingAsync()
         {
-            return await _context.ClothingItems.Include(c => c.ClothingBrand).ToListAsync();
+            return await _context.ClothingItems
+                .Include(c => c.ClothingItemPhotos)
+                .Include(c => c.ClothingBrand)
+                .ToListAsync();
         }
 
         public async Task<IReadOnlyList<ClothingBrand>> GetClothingBrandsAsync()
@@ -41,24 +42,27 @@ namespace Infrastructure.Repositories
 
         public async Task<IReadOnlyList<ClothingItem>> GetClothingByGenderAsync(Gender gender)
         {
-            return await _context
-                .ClothingItems.Where(c => c.Gender == gender)
+            return await _context.ClothingItems
+                .Where(c => c.Gender == gender)
+                .Include(c => c.ClothingItemPhotos)
                 .Include(c => c.ClothingBrand)
                 .ToListAsync();
         }
 
         public async Task<IReadOnlyList<ClothingItem>> GetClothingBySizeAsync(Size size)
         {
-            return await _context
-                .ClothingItems.Where(c => c.Size == size)
+            return await _context.ClothingItems
+                .Where(c => c.Size == size)
+                .Include(c => c.ClothingItemPhotos)
                 .Include(c => c.ClothingBrand)
                 .ToListAsync();
         }
 
         public async Task<IReadOnlyList<ClothingItem>> GetClothingByCategoryAsync(Category category)
         {
-            return await _context
-                .ClothingItems.Where(c => c.Category == category)
+            return await _context.ClothingItems
+                .Where(c => c.Category == category)
+                .Include(c => c.ClothingItemPhotos)
                 .Include(c => c.ClothingBrand)
                 .ToListAsync();
         }
@@ -82,7 +86,10 @@ namespace Infrastructure.Repositories
             {
                 query = query.Where(c => c.Category == category);
             }
-            return await query.Include(c => c.ClothingBrand).ToListAsync();
+            return await query
+                .Include(c => c.ClothingItemPhotos)
+                .Include(c => c.ClothingBrand)
+                .ToListAsync();
         }
 
         public async Task<IReadOnlyList<ClothingItem>> GetAllClothingItemsAsync()
