@@ -24,6 +24,7 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatDialogModule} from '@angular/material/dialog';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [],
@@ -54,7 +55,8 @@ import { MatStepper, MatStepperModule } from '@angular/material/stepper';
     MatGridListModule,
     MatDialogModule,
     MatStepperModule,
-    FormsModule
+    FormsModule,
+    MatTooltipModule
   ],
   exports: [
     MatFormFieldModule,
@@ -84,6 +86,7 @@ import { MatStepper, MatStepperModule } from '@angular/material/stepper';
     MatCardContent,
     MatStepperModule,
     FormsModule,
+    MatTooltipModule
   ]
 })
 

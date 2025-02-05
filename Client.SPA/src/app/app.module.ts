@@ -5,7 +5,7 @@ import { appConfig } from './app.config';  // Import the new app config
 import { AppComponent } from './app.component';  // Import your root component
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from './shared/shared.module';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 import { GalleryModule } from 'ng-gallery';
 import { FileUploadModule } from 'ng2-file-upload';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -14,6 +14,8 @@ import { CoreModule } from './core/core.module';
 import { HomeComponent } from './home/home.component';
 import { RatingComponent } from './rating/rating.component';
 import { FavouritesComponent } from './favourites/favourites.component';
+import { LoadingInterceptor } from './core/interceptors/loading.interceptor';
+import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
 
 @NgModule({
   declarations: [
@@ -35,7 +37,10 @@ import { FavouritesComponent } from './favourites/favourites.component';
     FileUploadModule,
     TimeagoModule.forRoot()
   ],
-  providers: [],
+  providers: [
+    {provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true}
+  ],
   bootstrap: [AppComponent]  // Bootstrap the root component
 })
 export class AppModule { }

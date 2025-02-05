@@ -18,8 +18,9 @@ namespace Infrastructure.Repositories
 
         public async Task<IEnumerable<FavouriteItem>> GetFavoritesByUserIdAsync(string userId)
         {
-            return await _context
-                .FavoriteItems.Include(f => f.ClothingItem)
+            return await _context.FavoriteItems
+                .Include(f => f.ClothingItem)
+                .Include(f => f.User)
                 .Where(f => f.UserId == userId)
                 .ToListAsync();
         }
@@ -36,8 +37,9 @@ namespace Infrastructure.Repositories
             string userId
         )
         {
-            return await _context
-                .FavoriteItems.Include(f => f.ClothingItem)
+            return await _context.FavoriteItems
+                .Include(f => f.ClothingItem)
+                .Include(f => f.User)                
                 .FirstOrDefaultAsync(f => f.ClothingItemId == clothingItemId && f.UserId == userId);
         }
     }
