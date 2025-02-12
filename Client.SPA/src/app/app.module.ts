@@ -26,6 +26,7 @@ import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
   ],
   imports: [
     BrowserModule,  // Required for running Angular in the browser
+    BrowserAnimationsModule,
     appConfig,  // Use the new appConfig for routing and change detection
     GalleryModule,
     HttpClient,
