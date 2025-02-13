@@ -8,8 +8,11 @@
         <div class="col-md-4" *ngFor="let item of favoriteItems">
           <mat-card class="mb-4">
             <mat-card-content>
-              <h5 mat-card-title>{{ item.clothingItemDto?.name }}</h5>
-              <p mat-card-subtitle>{{ item.clothingItemDto?.description }}</p>
+              <!-- <h5 mat-card-title>{{ item.clothingItemDto?.name }}</h5>
+              <p mat-card-subtitle>{{ item.clothingItemDto?.description }}</p> -->
+
+              <h5 mat-card-title>{{ item.clothingItemDto.name }}</h5>
+              <p mat-card-subtitle>{{ item.clothingItemDto.description }}</p>
             </mat-card-content>
             <mat-card-actions>
               <button mat-raised-button color="warn" (click)="removeFavorite(item.clothingItemDtoId)">Remove</button>
