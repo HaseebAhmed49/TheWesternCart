@@ -9,7 +9,7 @@ namespace Application.Services.Interfaces
     public interface ICommentService
     {
         Task AddCommentAsync(CommentDto commentDto);
-        Task RemoveCommentAsync(Guid commentId);
+        Task RemoveCommentAsync(Guid commentId, string userId);
         Task<IEnumerable<CommentDto>> GetCommentsForClothingItemAsync(Guid clothingItemId);
         Task<IEnumerable<CommentDto>> GetCommentsByUserIdAsync(string userId);
     }

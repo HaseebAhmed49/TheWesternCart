@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Errors;
+using API.Extensions;
 using Application.DTOs;
 using Application.Exceptions;
 using Application.Services.Interfaces;
@@ -21,6 +22,7 @@ namespace API.Controllers
         {
             _commentService = commentService;
         }
+        
         [HttpPost]
         public async Task<ActionResult> AddComment(CommentDto commentDto)
         {
@@ -38,12 +40,16 @@ namespace API.Controllers
                 return StatusCode(500, new ApiResponse(500, "An error occurred while processing your request"));
             }
         }
+
         [HttpDelete("{commentId}")]
         public async Task<ActionResult> RemoveComment(Guid commentId)
         {
             try
             {
-                await _commentService.RemoveCommentAsync(commentId);
+                var userId = User.GetUserId();
+                if (userId == null) return Unauthorized();
+                
+                await _commentService.RemoveCommentAsync(commentId, userId);
                 return NoContent();
             }
             catch (NotFoundException ex)
@@ -55,6 +61,7 @@ namespace API.Controllers
                 return StatusCode(500, new ApiResponse(500, "An error occurred while processing your request"));
             }
         }
+
         [HttpGet("clothing/{clothingItemId}")]
         public async Task<ActionResult<IEnumerable<CommentDto>>> GetCommentsForClothingItem(Guid clothingItemId)
         {
@@ -65,13 +72,14 @@ namespace API.Controllers
             }
             catch (NotFoundException ex)
             {
-                return NotFound(new ApiResponse(404, ex.Message));
+                return NotFound(new ApiResponse(404, "No comments found for this item."));
             }
             catch (Exception ex)
             {
                 return StatusCode(500, new ApiResponse(500, "An error occurred while processing your request"));
             }
         }
+
         [HttpGet("users/{userId}")]
         public async Task<ActionResult<IEnumerable<CommentDto>>> GetCommentsByUserId(string userId)
         {
@@ -82,7 +90,7 @@ namespace API.Controllers
             }
             catch (NotFoundException ex)
             {
-                return NotFound(new ApiResponse(404, ex.Message));
+                return NotFound(new ApiResponse(404, "No comments found for this user."));
             }
             catch (Exception ex)
             {

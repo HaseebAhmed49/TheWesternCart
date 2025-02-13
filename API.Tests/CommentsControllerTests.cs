@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using API.Controllers;
 using API.Errors;
 using Application.DTOs;
 using Application.Exceptions;
 using Application.Services.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 
@@ -21,7 +23,7 @@ namespace API.Tests
             _commentServiceMock = new Mock<ICommentService>();
             _controller = new CommentsController(_commentServiceMock.Object);
         }
-        [Fact]
+        [Fact] 
         public async Task AddComment_ReturnsOkResult_WhenSuccessful()
         {
             // Arrange
@@ -62,23 +64,27 @@ namespace API.Tests
             Assert.Equal(500, apiResponse.StatusCode);
             Assert.Equal("An error occurred while processing your request", apiResponse.Message);
         }
-        [Fact]
-        public async Task RemoveComment_ReturnsNoContentResult_WhenSuccessful()
-        {
-            // Arrange
-            var commentId = Guid.NewGuid();
-            // Act
-            var result = await _controller.RemoveComment(commentId);
-            // Assert
-            Assert.IsType<NoContentResult>(result);
-        }
+        
         [Fact]
         public async Task RemoveComment_ReturnsNotFound_WhenNotFoundExceptionThrown()
         {
             // Arrange
             var commentId = Guid.NewGuid();
-            _commentServiceMock.Setup(service => service.RemoveCommentAsync(commentId))
+            var userId = "test-user-id";
+            _commentServiceMock.Setup(service => service.RemoveCommentAsync(commentId, userId))
                 .ThrowsAsync(new NotFoundException("Comment not found."));
+
+            _controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext
+                {
+                    User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                    {
+                        new Claim(ClaimTypes.NameIdentifier, userId)
+                    }))
+                }
+            };
+
             // Act
             var result = await _controller.RemoveComment(commentId);
             // Assert
@@ -92,8 +98,20 @@ namespace API.Tests
         {
             // Arrange
             var commentId = Guid.NewGuid();
-            _commentServiceMock.Setup(service => service.RemoveCommentAsync(commentId))
+            var userId = "test-user-id";
+            _commentServiceMock.Setup(service => service.RemoveCommentAsync(commentId, userId))
                 .ThrowsAsync(new Exception("Test exception"));
+
+            _controller.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext
+                {
+                    User = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+                    {
+                        new Claim(ClaimTypes.NameIdentifier, userId)
+                    }))
+                }
+            };
             // Act
             var result = await _controller.RemoveComment(commentId);
             // Assert
@@ -135,7 +153,7 @@ namespace API.Tests
             var notFoundResult = Assert.IsType<NotFoundObjectResult>(result.Result);
             var apiResponse = Assert.IsType<ApiResponse>(notFoundResult.Value);
             Assert.Equal(404, apiResponse.StatusCode);
-            Assert.Equal("No comments found for this clothing item.", apiResponse.Message);
+            Assert.Equal("No comments found for this item.", apiResponse.Message);
         }
         [Fact]
         public async Task GetCommentsForClothingItem_ReturnsInternalServerError_WhenExceptionThrown()

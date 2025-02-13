@@ -50,6 +50,10 @@ namespace Application.Mapping
             CreateMap<Comment, CommentDto>()
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName))
                 .ReverseMap();
+
+            CreateMap<LikeDislike, LikeDislikeDto>()
+            .ForPath(dest => dest.UserDto.UserName, opt => opt.MapFrom(src => src.User.UserName))
+            .ReverseMap();
             
             CreateMap<Coupon, CouponDto>().ReverseMap();
             

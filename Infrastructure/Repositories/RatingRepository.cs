@@ -68,6 +68,7 @@ namespace Infrastructure.Repositories
         public async Task<Rating?> GetUserRatingAsync(string userId, Guid clothingItemId)
         {
             return await _context.Ratings
+                .Include(r => r.User)
                 .FirstOrDefaultAsync(r => r.UserId == userId && r.ClothingItemId == clothingItemId);
         }
     }

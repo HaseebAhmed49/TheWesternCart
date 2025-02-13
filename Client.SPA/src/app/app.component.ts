@@ -7,6 +7,7 @@ import { MaterialModule } from './shared/modules/material/material.module';
 import { NgxSpinner, NgxSpinnerModule } from 'ngx-spinner';
 import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { BasketService } from './basket/basket.service';
 
 @Component({
   selector: 'app-root',
@@ -24,14 +25,24 @@ import { MatInputModule } from '@angular/material/input';
 
 export class AppComponent implements OnInit {
   title = 'TheWesternCart';
-  constructor(private accountService: AccountService) {}
+
+  constructor(private accountService: AccountService, private basketService: BasketService,) {}
+
   ngOnInit(): void {
+    // this.loadBasket();
     this.setCurrentUser();
+
   }
+
   setCurrentUser() {
     const userString = localStorage.getItem('user');
     if (!userString) return;
     const user: User = JSON.parse(userString);
     this.accountService.setCurrentUser(user);
+  }
+
+  loadBasket() {
+    const basketId = localStorage.getItem('basket_id');
+    if (basketId) this.basketService.getBasket(basketId);
   }
 }

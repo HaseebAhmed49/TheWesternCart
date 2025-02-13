@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Guid } from 'guid-typescript';
 import { environment } from '../../../environments/environment';
-import { Rating } from '../models/rating';
+import { RatingDto } from '../models/rating';
 
 @Injectable({
   providedIn: 'root'
@@ -15,11 +15,11 @@ export class RatingService {
   constructor(private http: HttpClient) {
   }
   
-  addRating(rating: Rating): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}rating`, rating);
+  addRating(rating: RatingDto): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}rating/${rating}`, {});
   }
 
-  updateRating(rating: Rating): Observable<void> {
+  updateRating(rating: RatingDto): Observable<void> {
     return this.http.put<void>(`${this.baseUrl}rating`, rating);
   }
 
@@ -27,7 +27,7 @@ export class RatingService {
     return this.http.get<number>(`${this.baseUrl}rating/clothing/${clothingItemId}/average`);
   }
   
-  getUserRating(userId: string, clothingItemId: string): Observable<Rating | null> {
-    return this.http.get<Rating | null>(`${this.baseUrl}rating/user-rating/${clothingItemId}`);
+  getUserRating(userId: string, clothingItemId: string): Observable<RatingDto | null> {
+    return this.http.get<RatingDto | null>(`${this.baseUrl}rating/user-rating/${clothingItemId}`);
   }
 }
