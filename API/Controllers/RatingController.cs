@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Errors;
+using API.Extensions;
 using Application.DTOs;
 using Application.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -25,7 +26,7 @@ namespace API.Controllers
         {
             try
             {
-                await _ratingService.AddRatingAsync(ratingDto.ClothingItemId, ratingDto);
+                await _ratingService.AddRatingAsync(ratingDto);
                 return Ok();
             }
             catch (ArgumentNullException ex)
@@ -57,6 +58,22 @@ namespace API.Controllers
             {
                 await _ratingService.UpdateRatingAsync(ratingDto);
                 return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponse(500, "An error occurred while processing your request"));
+            }
+        }
+
+        [HttpGet("user-rating/{clothingItemId}")]
+        public async Task<ActionResult<RatingDto?>> GetUserRating(Guid clothingItemId)
+        {
+            try
+            {
+                var userId = User.GetUserId();
+                if (userId == null) return Unauthorized();
+                var rating = await _ratingService.GetUserRatingAsync(userId, clothingItemId);
+                return Ok(rating);
             }
             catch (Exception ex)
             {

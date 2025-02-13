@@ -29,8 +29,9 @@ export class ClothingDetailsComponent implements OnInit {
   quantityInBasket = 0;
   user?: User;
 
-  averageRating: number | null | undefined;
+  averageRating: number | undefined;
   userRating: number | undefined;
+  
   constructor(private accountService: AccountService, private ratingService: RatingService, private shopService: ShopService, private activatedRoute: ActivatedRoute, private bcService: BreadcrumbService, private basketService: BasketService) {
     this.bcService.set('@productDetails', ' ')
     this.accountService.currentUser$.pipe(take(1)).subscribe({
@@ -39,9 +40,11 @@ export class ClothingDetailsComponent implements OnInit {
       }
     })
   }
+
   ngOnInit(): void {
-    this.loadProduct()
+    this.loadProduct();
   }
+
   loadProduct() {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
     if (id) {
@@ -58,19 +61,23 @@ export class ClothingDetailsComponent implements OnInit {
               }
             }
           });
+          this.loadRatings(id);
         },
         error: error => console.log(error)
       });
     }
   }
+
   incrementQuantity() {
     this.quantity++;
   }
+
   decrementQuantity() {
     if (this.quantity > 1) {
       this.quantity--;
     }
   }
+
   updateBasket() {
     if (this.product) {
       if (this.quantity > this.quantityInBasket) {
@@ -84,9 +91,11 @@ export class ClothingDetailsComponent implements OnInit {
       }
     }
   }
+
   get buttonText() {
     return this.quantityInBasket === 0 ? 'Add to basket' : 'Update basket';
   }
+
   loadRatings(clothingItemId: string) {
     this.ratingService.getAverageRating(clothingItemId).subscribe({
       next: averageRating => {
@@ -94,7 +103,17 @@ export class ClothingDetailsComponent implements OnInit {
       },
       error: error => console.log(error)
     });
+
+    if (this.user) {
+      this.ratingService.getUserRating(this.user.id, clothingItemId).subscribe({
+        next: userRating => {
+          this.userRating = userRating ? userRating.score : undefined;
+        },
+        error: error => console.log(error)
+      });
+    }
   }
+
   onRating(rating: number) {
     if (this.product && this.user) {
       const newRating: Rating = {
