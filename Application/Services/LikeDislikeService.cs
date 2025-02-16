@@ -20,6 +20,7 @@ namespace Application.Services
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
+        
         public async Task AddLikeDislikeAsync(LikeDislikeDto likeDislikeDto)
         {
             if (likeDislikeDto == null)
@@ -27,9 +28,9 @@ namespace Application.Services
                 throw new ArgumentNullException(nameof(likeDislikeDto));
             }
             var likeDislike = _mapper.Map<LikeDislike>(likeDislikeDto);
-            await _unitOfWork.LikeDislikeRepository.AddAsync(likeDislike);
-            await _unitOfWork.SaveAsync();
+            await _unitOfWork.LikeDislikeRepository.AddLikeToCommentAsync(likeDislike);
         }
+
         public async Task RemoveLikeDislikeAsync(Guid likeDislikeId)
         {
             var likeDislike = await _unitOfWork.LikeDislikeRepository.GetByIdAsync(likeDislikeId);
@@ -40,6 +41,7 @@ namespace Application.Services
             _unitOfWork.LikeDislikeRepository.Remove(likeDislike);
             await _unitOfWork.SaveAsync();
         }
+
         public async Task<IEnumerable<LikeDislikeDto>> GetLikesDislikesByUserIdAsync(string userId)
         {
             var likesDislikes = await _unitOfWork.LikeDislikeRepository.GetLikesDislikesByUserIdAsync(userId);
@@ -49,6 +51,7 @@ namespace Application.Services
             }
             return _mapper.Map<IEnumerable<LikeDislikeDto>>(likesDislikes);
         }
+
         public async Task<IEnumerable<LikeDislikeDto>> GetLikesDislikesByCommentIdAsync(Guid commentId)
         {
             var likesDislikes = await _unitOfWork.LikeDislikeRepository.GetLikesDislikesByCommentIdAsync(commentId);
@@ -57,6 +60,16 @@ namespace Application.Services
                 throw new NotFoundException("No likes/dislikes found for this comment.");
             }
             return _mapper.Map<IEnumerable<LikeDislikeDto>>(likesDislikes);
+        }
+
+        public async Task<int> CountLikesAsync(Guid commentId)
+        {
+            return await _unitOfWork.LikeDislikeRepository.CountLikesAsync(commentId);
+        }
+
+        public async Task<int> CountDislikesAsync(Guid commentId)
+        {
+            return await _unitOfWork.LikeDislikeRepository.CountDislikesAsync(commentId);
         }
         
     }

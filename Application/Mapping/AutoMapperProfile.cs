@@ -52,7 +52,7 @@ namespace Application.Mapping
                 .ReverseMap();
 
             CreateMap<LikeDislike, LikeDislikeDto>()
-            .ForPath(dest => dest.UserDto.UserName, opt => opt.MapFrom(src => src.User.UserName))
+            .ForPath(dest => dest.Username, opt => opt.MapFrom(src => src.User.UserName))
             .ReverseMap();
             
             CreateMap<Coupon, CouponDto>().ReverseMap();
@@ -63,11 +63,7 @@ namespace Application.Mapping
                 .ForMember(dest => dest.ClothingItemDtoId, opt => opt.MapFrom(src => src.ClothingItemId)) 
                 .ForMember(dest => dest.UserDtoId, opt => opt.MapFrom(src => src.UserId))
                 .ReverseMap();
-            
-            CreateMap<LikeDislike, LikeDislikeDto>()
-                .ForPath(dest => dest.UserDto.UserName, opt => opt.MapFrom(src => src.User.UserName))
-                .ReverseMap();
-            
+                        
             CreateMap<Notification, NotificationDto>().ReverseMap();
             
             CreateMap<Rating, RatingDto>()
