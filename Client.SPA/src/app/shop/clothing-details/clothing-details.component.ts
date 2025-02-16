@@ -7,7 +7,7 @@ import { ClothingItem } from '../../shared/models/clothing-item';
 import { AccountService } from '../../account/account.service';
 import { User } from '../../shared/models/user';
 import { RatingService } from '../../shared/rating/rating.service';
-import { RatingDto } from '../../shared/models/rating';
+import { Rating } from '../../shared/models/rating';
 import { BasketService } from '../../basket/basket.service';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../shared/modules/material/material.module';
@@ -136,28 +136,20 @@ export class ClothingDetailsComponent implements OnInit {
 
   onRating(rating: number) {
     if (this.product && this.user) {
-      const newRating: RatingDto = {
+      const newRating: Rating = {
         userId: this.user.id,
         username: this.user.username,
         clothingItemId: this.product.id,
         score: rating
       };
       
-      this.ratingService.updateRating(newRating).subscribe({
+      this.ratingService.addRating(newRating).subscribe({
         next: () => {
-          console.log('Rating updated successfully');
+          console.log('Rating added/updated successfully');
           this.loadRatings();
         },
-        error: error => {
-          console.log('Error updating rating:', error);
-          this.ratingService.addRating(newRating).subscribe({
-            next: () => {
-              console.log('Rating added successfully');
-              this.loadRatings();
-            },
-            error: error => console.log('Error adding rating:', error)
-          });
-        }
+        error: error => 
+          console.log('Error adding/updating rating:', error)
       });
     }
   }

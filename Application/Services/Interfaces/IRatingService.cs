@@ -10,7 +10,6 @@ namespace Application.Services.Interfaces
     {
         Task AddRatingAsync(RatingDto rating);
         Task<double?> GetAverageRatingAsync(Guid clothingItemId);
-        Task UpdateRatingAsync(RatingDto ratingDto);
         Task<RatingDto?> GetUserRatingAsync(string userId, Guid clothingItemId);
     }
 }

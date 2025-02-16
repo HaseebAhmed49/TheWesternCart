@@ -12,14 +12,17 @@ export class AccountService {
   baseUrl = environment.apiUrl;
   private currentUserSource = new ReplaySubject<User | null>(1);
   currentUser$ = this.currentUserSource.asObservable();
+  
   constructor(private http: HttpClient, private router: Router) {
   }
+
   login(model: any) {
     return this.http.post<User>(this.baseUrl + 'account/login', model).pipe(
       map((response: User) => {
         const user = response;
         if (user) {
           this.setCurrentUser(user);
+          this.router.navigateByUrl('/shop');
         }
       }),
       catchError(error => {
@@ -28,11 +31,13 @@ export class AccountService {
       })
     );
   }
+
   register(model: any) {
     return this.http.post<User>(this.baseUrl + 'account/register', model).pipe(
       map(user => {
         if (user) {
           this.setCurrentUser(user);
+          this.router.navigateByUrl('/shop');
         }
       }),
       catchError(error => {
@@ -41,11 +46,13 @@ export class AccountService {
       })
     );
   }
+
   logout() {
     localStorage.removeItem('user');
     this.currentUserSource.next(null);
-    this.router.navigateByUrl('/');
+    this.router.navigateByUrl('/shop');
   }
+
   confirmEmail(userName: string) {
     const token = this.getTokenFromLocalStorage();
     return this.http.post<boolean>(this.baseUrl + 'account/confirm-email', {userName, token}).pipe(
@@ -55,6 +62,7 @@ export class AccountService {
       })
     );
   }
+
   resetPassword(userName: string, newPassword: string) {
     const token = this.getTokenFromLocalStorage();
     return this.http.post<boolean>(this.baseUrl + 'account/reset-password', {userName, token, newPassword}).pipe(
@@ -64,6 +72,7 @@ export class AccountService {
       })
     );
   }
+
   changePassword(userName: string, currentPassword: string, newPassword: string) {
     const token = this.getTokenFromLocalStorage();
     return this.http.post<boolean>(this.baseUrl + 'account/change-password', {
@@ -78,6 +87,7 @@ export class AccountService {
       })
     );
   }
+
   checkEmailExists(email: string) {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${this.getTokenFromLocalStorage()}`);
     return this.http.get<boolean>(this.baseUrl + 'account/check-email-exists?email=' + email, { headers }).pipe(
@@ -87,6 +97,7 @@ export class AccountService {
       })
     );
   }
+
   checkUsernameExists(username: string) {
     return this.http.get<boolean>(this.baseUrl + 'account/check-username-exists?username=' + username).pipe(
       catchError(error => {
@@ -95,6 +106,7 @@ export class AccountService {
       })
     );
   }
+
   setCurrentUser(user: User) {
     user.roles = [];
     const roles = this.getDecodedToken(user.token).role;
@@ -102,9 +114,11 @@ export class AccountService {
     localStorage.setItem('user', JSON.stringify(user));
     this.currentUserSource.next(user);
   }
+
   getDecodedToken(token: string) {
     return JSON.parse(atob(token.split('.')[1]));
   }
+
   private getTokenFromLocalStorage() {
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     return user.token;

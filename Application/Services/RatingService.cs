@@ -32,13 +32,7 @@ namespace Application.Services
         public async Task<double?> GetAverageRatingAsync(Guid clothingItemId)
         {
             return await _unitOfWork.RatingRepository.GetAverageRatingByClothingItemIdAsync(clothingItemId);
-        }
-        
-        public async Task UpdateRatingAsync(RatingDto ratingDto)
-        {
-            var user = await _unitOfWork.UserRepository.GetUserByUserName(ratingDto.UserName);
-            await _unitOfWork.RatingRepository.UpdateRatingAsync(user.Id, ratingDto.ClothingItemId, ratingDto.Score);
-        }
+        }        
 
         public async Task<RatingDto?> GetUserRatingAsync(string userId, Guid clothingItemId)
         {

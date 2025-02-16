@@ -52,21 +52,7 @@ namespace API.Controllers
             {
                 return StatusCode(500, new ApiResponse(500, "An error occurred while processing your request"));
             }
-        }
-
-        [HttpPut]
-        public async Task<ActionResult> UpdateRating(RatingDto ratingDto)
-        {
-            try
-            {
-                await _ratingService.UpdateRatingAsync(ratingDto);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new ApiResponse(500, "An error occurred while processing your request"));
-            }
-        }
+        }        
 
         [HttpGet("user-rating/{clothingItemId}")]
         public async Task<ActionResult<RatingDto?>> GetUserRating(Guid clothingItemId)
