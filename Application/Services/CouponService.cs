@@ -38,7 +38,7 @@ namespace Application.Services
             if (coupon == null) throw new NotFoundException("Coupon not found or expired");
             clothingItem.Discount = coupon.DiscountPercentage;
             await _unitOfWork.SaveAsync();
-            var wishlists = await _unitOfWork.WishListRepository.GetWishlistsByClothingItemIdAsync(clothingItemId);
+            var wishlists = await _unitOfWork.WishListRepository.GetWishListsByClothingItemIdAsync(clothingItemId);
             var usersToNotify = wishlists
                 .Where(w => w.Items.Any(wi => wi.ClothingItemId == clothingItemId))
                 .Select(w => w.UserId)

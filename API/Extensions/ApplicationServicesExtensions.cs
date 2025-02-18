@@ -9,6 +9,7 @@ using Application.Services;
 using Application.Services.Interfaces;
 using Application.UoW;
 using Core.Interfaces;
+using FashionClothesAndTrends.Application.Services;
 using Infrastructure.Context;
 using Infrastructure.Repositories;
 using Infrastructure.UoW;
@@ -48,7 +49,7 @@ namespace API.Extensions
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<IOrderHistoryService, OrderHistoryService>();
-            services.AddScoped<IWishListService, WishListService>();
+            services.AddScoped<IWishListService, WishlistService>();
             services.AddScoped<IRatingService, RatingService>();
             services.AddScoped<ILikeDislikeService, LikeDislikeService>();
             services.AddScoped<INotificationService, NotificationService>();

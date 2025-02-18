@@ -12,7 +12,7 @@ namespace Application.Services.Interfaces
         Task<WishListDto?> GetWishListByNameAsync(string userId, string name);
         Task<WishListDto> CreateWishListAsync(string userId, string name);
         Task<bool> DeleteWishListAsync(Guid wishlistId);
-        Task<WishListItemDto> AddItemToWishListAsync(Guid wishlistId, Guid clothingItemId);
+        Task<WishListItemDto> AddItemToWishListAsync(string wishlistId, Guid clothingItemId, string? wishlistName = null);
         Task<bool> RemoveItemFromWishListAsync(Guid wishlistId, Guid itemId);
     }
 }

@@ -8,8 +8,13 @@ namespace Core.Interfaces
 {
     public interface IWishListRepository : IGenericRepository<WishList>
     {
+        Task<WishList> CreateNewWishListAsync(string userId, string wishlistName);
+        Task RemoveWishListAsync(WishList wishlist);
+        Task<WishList?> GetWishListByNameAsync(string userId, string wishlistName);
+
         Task<IReadOnlyList<WishList>> GetWishListsByUserIdAsync(string userId);
-        Task<WishList?> GetWishListByNameAsync(string userId, string name);
-        Task<IReadOnlyList<WishList>> GetWishlistsByClothingItemIdAsync(Guid clothingItemId);
+        Task<IReadOnlyList<WishList>> GetWishListsByClothingItemIdAsync(Guid clothingItemId);
+        Task<WishListItem> AddItemToWishListAsync(WishList wishlist, Guid clothingItemId);
+        Task<bool> RemoveItemFromWishListAsync(WishList wishlist, Guid itemId);
     }
 }

@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Application.DTOs;
 using Application.Exceptions;
 using Application.Services.Interfaces;
@@ -9,110 +5,105 @@ using Application.UoW;
 using AutoMapper;
 using Core.Entities;
 
-namespace Application.Services
+namespace FashionClothesAndTrends.Application.Services;
+
+public class WishlistService : IWishListService
 {
-    public class WishListService : IWishListService
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IMapper _mapper;
+
+    public WishlistService(IUnitOfWork unitOfWork, IMapper mapper)
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
+        _unitOfWork = unitOfWork;
+        _mapper = mapper;
+    }
 
-        public WishListService(IUnitOfWork unitOfWork, IMapper mapper)
+public async Task<WishListDto> CreateWishListAsync(string userId, string name)
+    {
+        var existingWishlist = await _unitOfWork.WishListRepository.GetWishListByNameAsync(userId, name);
+        if (existingWishlist != null)
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
+            throw new ConflictException($"Wishlist with name '{name}' already exists for user '{userId}'.");
         }
 
-        public async Task<IReadOnlyList<WishListDto>> GetWishListsByUserIdAsync(string userId)
+        var wishlist = await _unitOfWork.WishListRepository.CreateNewWishListAsync(userId, name);
+        return _mapper.Map<WishListDto>(wishlist);
+    }
+
+    public async Task<bool> DeleteWishListAsync(Guid wishlistId)
+    {
+        var wishlist = await _unitOfWork.WishListRepository.GetByIdAsync(wishlistId);
+        if (wishlist == null)
         {
-            var wishLists = await _unitOfWork.WishListRepository.GetWishListsByUserIdAsync(userId);
-            return _mapper.Map<IReadOnlyList<WishListDto>>(wishLists);
+            throw new NotFoundException($"Wishlist with ID '{wishlistId}' not found.");
         }
 
-        public async Task<WishListDto?> GetWishListByNameAsync(string userId, string name)
+        await _unitOfWork.WishListRepository.RemoveWishListAsync(wishlist);
+        return true;
+    }
+
+    public async Task<IReadOnlyList<WishListDto>> GetWishListsByUserIdAsync(string userId)
+    {
+        var wishlists = await _unitOfWork.WishListRepository.GetWishListsByUserIdAsync(userId);
+        return _mapper.Map<IReadOnlyList<WishListDto>>(wishlists);
+    }
+
+    public async Task<WishListDto?> GetWishListByNameAsync(string userId, string name)
+    {
+        var wishlist = await _unitOfWork.WishListRepository.GetWishListByNameAsync(userId, name);
+        if (wishlist == null)
         {
-            var wishList = await _unitOfWork.WishListRepository.GetWishListByNameAsync(
-                userId,
-                name
-            );
-            if (wishList == null)
+            throw new NotFoundException($"Wishlist with name '{name}' not found for user '{userId}'.");
+        }
+
+        return _mapper.Map<WishListDto>(wishlist);
+    }
+    public async Task<WishListItemDto> AddItemToWishListAsync(string userId, Guid clothingItemId,
+        string? wishlistName = null)
+    {
+        WishList wishlist;
+
+        if (string.IsNullOrEmpty(wishlistName))
+        {
+            wishlist = await _unitOfWork.WishListRepository.GetWishListByNameAsync(userId, "Default");
+            if (wishlist == null)
             {
-                throw new NotFoundException(
-                    $"WishList with name '{name}' not found for user '{userId}'."
-                );
+                wishlist = new WishList
+                {
+                    UserId = userId,
+                    Name = "Default",
+                    Items = new List<WishListItem>()
+                };
+                await _unitOfWork.WishListRepository.AddAsync(wishlist);
             }
-            return _mapper.Map<WishListDto>(wishList);
+        }
+        else
+        {
+            wishlist = await _unitOfWork.WishListRepository.GetWishListByNameAsync(userId, wishlistName);
+            if (wishlist == null)
+            {
+                throw new NotFoundException($"Wishlist with name '{wishlistName}' not found for user '{userId}'.");
+            }
         }
 
-        public async Task<WishListDto> CreateWishListAsync(string userId, string name)
+        var wishlistItem = await _unitOfWork.WishListRepository.AddItemToWishListAsync(wishlist, clothingItemId);
+        return _mapper.Map<WishListItemDto>(wishlistItem);
+    }
+
+    public async Task<bool> RemoveItemFromWishListAsync(Guid wishlistId, Guid itemId)
+    {
+        var wishlist = await _unitOfWork.WishListRepository.GetByIdAsync(wishlistId);
+        if (wishlist == null)
         {
-            var existingWishList = await _unitOfWork.WishListRepository.GetWishListByNameAsync(
-                userId,
-                name
-            );
-            if (existingWishList != null)
-            {
-                throw new ConflictException(
-                    $"WishList with name '{name}' already exists for user '{userId}'."
-                );
-            }
-            var wishList = new WishList
-            {
-                UserId = userId,
-                Name = name,
-                Items = new List<WishListItem>(),
-            };
-            await _unitOfWork.WishListRepository.AddAsync(wishList);
-            return _mapper.Map<WishListDto>(wishList);
+            throw new NotFoundException($"Wishlist with ID '{wishlistId}' not found.");
         }
 
-        public async Task<bool> DeleteWishListAsync(Guid wishListId)
+        var result = await _unitOfWork.WishListRepository.RemoveItemFromWishListAsync(wishlist, itemId);
+        if (!result)
         {
-            var wishList = await _unitOfWork.WishListRepository.GetByIdAsync(wishListId);
-            if (wishList == null)
-            {
-                throw new NotFoundException($"WishList with ID '{wishListId}' not found.");
-            }
-            await _unitOfWork.WishListRepository.RemoveAsync(wishList);
-            return true;
+            throw new NotFoundException($"Item with ID '{itemId}' not found in wishlist '{wishlistId}'.");
         }
 
-        public async Task<WishListItemDto> AddItemToWishListAsync(
-            Guid wishListId,
-            Guid clothingItemId
-        )
-        {
-            var wishList = await _unitOfWork.WishListRepository.GetByIdAsync(wishListId);
-            if (wishList == null)
-            {
-                throw new NotFoundException($"WishList with ID '{wishListId}' not found.");
-            }
-            var wishListItem = new WishListItem
-            {
-                WishListId = wishListId,
-                ClothingItemId = clothingItemId,
-            };
-            wishList.Items.Add(wishListItem);
-            await _unitOfWork.WishListRepository.UpdateAsync(wishList);
-            return _mapper.Map<WishListItemDto>(wishListItem);
-        }
-
-        public async Task<bool> RemoveItemFromWishListAsync(Guid wishListId, Guid itemId)
-        {
-            var wishList = await _unitOfWork.WishListRepository.GetByIdAsync(wishListId);
-            if (wishList == null)
-            {
-                throw new NotFoundException($"WishList with ID '{wishListId}' not found.");
-            }
-            var item = wishList.Items.FirstOrDefault(i => i.Id == itemId);
-            if (item == null)
-            {
-                throw new NotFoundException(
-                    $"Item with ID '{itemId}' not found in wishList '{wishListId}'."
-                );
-            }
-            wishList.Items.Remove(item);
-            await _unitOfWork.WishListRepository.UpdateAsync(wishList);
-            return true;
-        }
+        return true;
     }
 }

@@ -1,3 +1,4 @@
+using API.Controllers;
 using API.Errors;
 using API.Extensions;
 using Application.DTOs;
@@ -6,119 +7,126 @@ using Application.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace API.Controllers
+namespace API.Controllers;
+
+[Authorize]
+public class WishListController : BaseApiController
 {
-    [Authorize]
-    public class WishListController : BaseApiController
+    private readonly IWishListService _wishlistService;
+
+    public WishListController(IWishListService wishlistService)
     {
-        private readonly IWishListService _wishListService;
-        public WishListController(IWishListService wishListService)
+        _wishlistService = wishlistService;
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> CreateWishlist(string userId, string wishlistName)
+    {
+        try
         {
-            _wishListService = wishListService;
+            await _wishlistService.CreateWishListAsync(userId, wishlistName);
+            return Ok();
         }
-        [HttpGet("user/{userId}")]
-        public async Task<ActionResult<IEnumerable<WishListDto>>> GetWishListsByUserId()
+        catch (ConflictException ex)
         {
-            try
-            {
-                var userId = User.GetUserId();
-                var wishLists = await _wishListService.GetWishListsByUserIdAsync(userId);
-                return Ok(wishLists);
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(new ApiResponse(404, ex.Message));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new ApiResponse(500, "An error occurred while processing your request"));
-            }
+            return Conflict(new ApiResponse(409, ex.Message));
         }
-        [HttpGet("user/{userId}/name/{name}")]
-        public async Task<ActionResult<WishListDto>> GetWishListByName(string name)
+        catch (Exception ex)
         {
-            try
-            {
-                var userId = User.GetUserId();
-                var wishList = await _wishListService.GetWishListByNameAsync(userId, name);
-                return Ok(wishList);
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(new ApiResponse(404, ex.Message));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new ApiResponse(500, "An error occurred while processing your request"));
-            }
+            return StatusCode(500, new ApiResponse(500, "An error occurred while processing your request"));
         }
-        [HttpPost]
-        public async Task<ActionResult<WishListDto>> CreateWishList(string userId, string name)
+    }
+
+    [HttpGet("user/{userId}")]
+    public async Task<ActionResult<IEnumerable<WishListDto>>> GetWishlistsByUserId()
+    {
+        try
         {
-            try
-            {
-                var wishList = await _wishListService.CreateWishListAsync(userId, name);
-                return CreatedAtAction(nameof(GetWishListByName), new { userId, name }, wishList);
-            }
-            catch (ConflictException ex)
-            {
-                return Conflict(new ApiResponse(409, ex.Message));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new ApiResponse(500, "An error occurred while processing your request"));
-            }
+            var userId = User.GetUserId();
+            var wishlists = await _wishlistService.GetWishListsByUserIdAsync(userId);
+            return Ok(wishlists);
         }
-        [HttpDelete("{wishListId}")]
-        public async Task<ActionResult> DeleteWishList(Guid wishListId)
+        catch (NotFoundException ex)
         {
-            try
-            {
-                await _wishListService.DeleteWishListAsync(wishListId);
-                return NoContent();
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(new ApiResponse(404, ex.Message));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new ApiResponse(500, "An error occurred while processing your request"));
-            }
+            return NotFound(new ApiResponse(404, ex.Message));
         }
-        [HttpPost("{wishListId}/items")]
-        public async Task<ActionResult<WishListItemDto>> AddItemToWishList(Guid wishListId, Guid clothingItemId)
+        catch (Exception ex)
         {
-            try
-            {
-                var wishListItem = await _wishListService.AddItemToWishListAsync(wishListId, clothingItemId);
-                return Ok(wishListItem);
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(new ApiResponse(404, ex.Message));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new ApiResponse(500, "An error occurred while processing your request"));
-            }
+            return StatusCode(500, new ApiResponse(500, "An error occurred while processing your request"));
         }
-        [HttpDelete("{wishListId}/items/{itemId}")]
-        public async Task<ActionResult> RemoveItemFromWishList(Guid wishListId, Guid itemId)
+    }
+
+    [HttpGet("user/{userId}/name/{wishlistName}")]
+    public async Task<ActionResult<WishListDto>> GetWishlistByName(string wishlistName)
+    {
+        try
         {
-            try
-            {
-                await _wishListService.RemoveItemFromWishListAsync(wishListId, itemId);
-                return NoContent();
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(new ApiResponse(404, ex.Message));
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new ApiResponse(500, "An error occurred while processing your request"));
-            }
+            var userId = User.GetUserId();
+            var wishlist = await _wishlistService.GetWishListByNameAsync(userId, wishlistName);
+            return Ok(wishlist);
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(new ApiResponse(404, ex.Message));
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new ApiResponse(500, "An error occurred while processing your request"));
+        }
+    }
+
+    [HttpDelete("{wishlistId}")]
+    public async Task<ActionResult> DeleteWishlist(Guid wishlistId)
+    {
+        try
+        {
+            await _wishlistService.DeleteWishListAsync(wishlistId);
+            return NoContent();
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(new ApiResponse(404, ex.Message));
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new ApiResponse(500, "An error occurred while processing your request"));
+        }
+    }
+
+    [HttpPost("items")]
+    public async Task<ActionResult<WishListItemDto>> AddItemToWishlist(Guid clothingItemId, string? wishlistName = null)
+    {
+        try
+        {
+            var userId = User.GetUserId();
+            var wishlistItem = await _wishlistService.AddItemToWishListAsync(userId, clothingItemId, wishlistName);
+            return Ok(wishlistItem);
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(new ApiResponse(404, ex.Message));
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new ApiResponse(500, "An error occurred while processing your request"));
+        }
+    }
+
+    [HttpDelete("{wishlistId}/items/{itemId}")]
+    public async Task<ActionResult> RemoveItemFromWishlist(Guid wishlistId, Guid itemId)
+    {
+        try
+        {
+            await _wishlistService.RemoveItemFromWishListAsync(wishlistId, itemId);
+            return NoContent();
+        }
+        catch (NotFoundException ex)
+        {
+            return NotFound(new ApiResponse(404, ex.Message));
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new ApiResponse(500, "An error occurred while processing your request"));
         }
     }
 }
