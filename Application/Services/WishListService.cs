@@ -18,7 +18,7 @@ public class WishlistService : IWishListService
         _mapper = mapper;
     }
 
-public async Task<WishListDto> CreateWishListAsync(string userId, string name)
+    public async Task<WishListDto> CreateWishListAsync(string userId, string name)
     {
         var existingWishlist = await _unitOfWork.WishListRepository.GetWishListByNameAsync(userId, name);
         if (existingWishlist != null)
@@ -59,11 +59,19 @@ public async Task<WishListDto> CreateWishListAsync(string userId, string name)
         return _mapper.Map<WishListDto>(wishlist);
     }
     public async Task<WishListItemDto> AddItemToWishListAsync(string userId, Guid clothingItemId,
-        string? wishlistName = null)
+        Guid? wishlistId = null)
     {
         WishList wishlist;
 
-        if (string.IsNullOrEmpty(wishlistName))
+        if (wishlistId.HasValue)
+        {
+            wishlist = await _unitOfWork.WishListRepository.GetByIdAsync(wishlistId.Value);
+            if (wishlist == null)
+            {
+                throw new NotFoundException($"Wishlist with ID '{wishlistId}' not found for user '{userId}'.");
+            }
+        }
+        else
         {
             wishlist = await _unitOfWork.WishListRepository.GetWishListByNameAsync(userId, "Default");
             if (wishlist == null)
@@ -75,14 +83,6 @@ public async Task<WishListDto> CreateWishListAsync(string userId, string name)
                     Items = new List<WishListItem>()
                 };
                 await _unitOfWork.WishListRepository.AddAsync(wishlist);
-            }
-        }
-        else
-        {
-            wishlist = await _unitOfWork.WishListRepository.GetWishListByNameAsync(userId, wishlistName);
-            if (wishlist == null)
-            {
-                throw new NotFoundException($"Wishlist with name '{wishlistName}' not found for user '{userId}'.");
             }
         }
 

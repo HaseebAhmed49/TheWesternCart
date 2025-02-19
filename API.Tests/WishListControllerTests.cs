@@ -12,7 +12,7 @@ namespace API.Tests;
 
 public class WishlistControllerTests
 {
-    private readonly Mock<IWishListService> _wishlistServiceMock;
+private readonly Mock<IWishListService> _wishlistServiceMock;
     private readonly WishListController _controller;
 
     public WishlistControllerTests()
@@ -156,7 +156,7 @@ public class WishlistControllerTests
             .ReturnsAsync(new WishListDto { Id = Guid.NewGuid(), Name = wishlistName });
 
         // Act
-        var result = await _controller.CreateWishlist(userId, wishlistName);
+        var result = await _controller.CreateWishlist(wishlistName);
 
         // Assert
         var okResult = Assert.IsType<OkResult>(result);
@@ -173,7 +173,7 @@ public class WishlistControllerTests
                 new ConflictException("Wishlist with name 'Wishlist 1' already exists for user 'test_user_id'."));
 
         // Act
-        var result = await _controller.CreateWishlist(userId, "Wishlist 1");
+        var result = await _controller.CreateWishlist("Wishlist 1");
 
         // Assert
         var conflictResult = Assert.IsType<ConflictObjectResult>(result);
@@ -191,7 +191,7 @@ public class WishlistControllerTests
             .ThrowsAsync(new Exception("Test exception"));
 
         // Act
-        var result = await _controller.CreateWishlist(userId, "Wishlist 1");
+        var result = await _controller.CreateWishlist("Wishlist 1");
 
         // Assert
         var statusCodeResult = Assert.IsType<ObjectResult>(result);
@@ -258,6 +258,7 @@ public class WishlistControllerTests
     {
         // Arrange
         var userId = "test_user_id";
+        var wishlistId = Guid.NewGuid();
         var clothingItemId = Guid.NewGuid();
         var wishlistItem = new WishListItemDto
         {
@@ -265,11 +266,11 @@ public class WishlistControllerTests
             ClothingItemId = clothingItemId,
             ClothingItemName = "Item 1"
         };
-        _wishlistServiceMock.Setup(service => service.AddItemToWishListAsync(userId, clothingItemId, null))
+        _wishlistServiceMock.Setup(service => service.AddItemToWishListAsync(userId, clothingItemId, wishlistId))
             .ReturnsAsync(wishlistItem);
 
         // Act
-        var result = await _controller.AddItemToWishlist(clothingItemId);
+        var result = await _controller.AddItemToWishlist(wishlistId, clothingItemId);
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result.Result);
@@ -282,18 +283,19 @@ public class WishlistControllerTests
     {
         // Arrange
         var userId = "test_user_id";
+        var wishlistId = Guid.NewGuid();
         var clothingItemId = Guid.NewGuid();
-        _wishlistServiceMock.Setup(service => service.AddItemToWishListAsync(userId, clothingItemId, null))
-            .ThrowsAsync(new NotFoundException("Wishlist with ID 'wishlistId' not found."));
+        _wishlistServiceMock.Setup(service => service.AddItemToWishListAsync(userId, clothingItemId, wishlistId))
+            .ThrowsAsync(new NotFoundException($"Wishlist with ID '{wishlistId}' not found."));
 
         // Act
-        var result = await _controller.AddItemToWishlist(clothingItemId);
+        var result = await _controller.AddItemToWishlist(wishlistId, clothingItemId);
 
         // Assert
         var notFoundResult = Assert.IsType<NotFoundObjectResult>(result.Result);
         var apiResponse = Assert.IsType<ApiResponse>(notFoundResult.Value);
         Assert.Equal(404, apiResponse.StatusCode);
-        Assert.Equal("Wishlist with ID 'wishlistId' not found.", apiResponse.Message);
+        Assert.Equal($"Wishlist with ID '{wishlistId}' not found.", apiResponse.Message);
     }
 
     [Fact]
@@ -310,4 +312,5 @@ public class WishlistControllerTests
 
         // Assert
         Assert.IsType<NoContentResult>(result);
-    }
+    }    
+}

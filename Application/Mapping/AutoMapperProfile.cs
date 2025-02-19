@@ -70,7 +70,8 @@ namespace Application.Mapping
                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName))
                 .ReverseMap();
             
-            CreateMap<WishList, WishListDto>().ReverseMap();
+            CreateMap<WishList, WishListDto>().ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.User.UserName))
+            .ReverseMap();
             CreateMap<WishListItem, WishListItemDto>()
                 .ForMember(dest => dest.ClothingItemName, opt => opt.MapFrom(src => src.ClothingItem.Name))
                 .ReverseMap();

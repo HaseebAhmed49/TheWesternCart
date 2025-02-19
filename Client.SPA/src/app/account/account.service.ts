@@ -5,6 +5,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {ReplaySubject} from 'rxjs';
 import {map, catchError} from 'rxjs/operators';
 import {Router} from '@angular/router';
+import { BasketService } from '../basket/basket.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -13,7 +14,7 @@ export class AccountService {
   private currentUserSource = new ReplaySubject<User | null>(1);
   currentUser$ = this.currentUserSource.asObservable();
   
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(private http: HttpClient, private router: Router, private basketService: BasketService) {
   }
 
   login(model: any) {
@@ -50,6 +51,7 @@ export class AccountService {
   logout() {
     localStorage.removeItem('user');
     this.currentUserSource.next(null);
+    this.basketService.deleteLocalBasket();
     this.router.navigateByUrl('/shop');
   }
 

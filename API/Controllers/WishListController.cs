@@ -19,11 +19,12 @@ public class WishListController : BaseApiController
         _wishlistService = wishlistService;
     }
 
-    [HttpPost]
-    public async Task<ActionResult> CreateWishlist(string userId, string wishlistName)
+    [HttpPost("{wishlistName}")]
+    public async Task<ActionResult> CreateWishlist(string wishlistName)
     {
         try
         {
+            var userId = User.GetUserId();
             await _wishlistService.CreateWishListAsync(userId, wishlistName);
             return Ok();
         }
@@ -37,7 +38,7 @@ public class WishListController : BaseApiController
         }
     }
 
-    [HttpGet("user/{userId}")]
+    [HttpGet("user")]
     public async Task<ActionResult<IEnumerable<WishListDto>>> GetWishlistsByUserId()
     {
         try
@@ -93,13 +94,13 @@ public class WishListController : BaseApiController
         }
     }
 
-    [HttpPost("items")]
-    public async Task<ActionResult<WishListItemDto>> AddItemToWishlist(Guid clothingItemId, string? wishlistName = null)
+    [HttpPost("{wishlistId}/items/{clothingItemId}")]
+    public async Task<ActionResult<WishListItemDto>> AddItemToWishlist(Guid wishlistId, Guid clothingItemId)
     {
         try
         {
             var userId = User.GetUserId();
-            var wishlistItem = await _wishlistService.AddItemToWishListAsync(userId, clothingItemId, wishlistName);
+            var wishlistItem = await _wishlistService.AddItemToWishListAsync(userId, clothingItemId, wishlistId);
             return Ok(wishlistItem);
         }
         catch (NotFoundException ex)

@@ -3,7 +3,9 @@ import { Guid } from "guid-typescript";
 export interface Wishlist {
     id: string;
     name: string;
-    wishListItems: WishlistItem[];
+    userId: string;
+    username: string;
+    items: WishlistItem[];
   }
   export interface WishlistItem {
     id: string;
