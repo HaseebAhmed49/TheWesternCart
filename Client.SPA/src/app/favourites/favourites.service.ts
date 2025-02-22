@@ -15,17 +15,18 @@ export class FavouritesService {
   constructor(private http: HttpClient) { }
 
   addFavorite(clothingItemId: string): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}favorites/${clothingItemId}`, {});
+    return this.http.post<void>(`${this.baseUrl}favourites/${clothingItemId}`, {});
   }
 
   removeFavorite(clothingItemId: string): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}favorites/${clothingItemId}`);
+    return this.http.delete<void>(`${this.baseUrl}favourites/${clothingItemId}`);
   }
 
   getFavoritesByUserId(): Observable<FavoriteItemDto[]> {
-    return this.http.get<FavoriteItemDto[]>(`${this.baseUrl}favorites/user`);
+    return this.http.get<FavoriteItemDto[]>(`${this.baseUrl}favourites/user`);
   }
 
   isFavorite(clothingItemId: string): Observable<boolean> {
-    return this.http.get<boolean>(`${this.baseUrl}favorites/${clothingItemId}/isFavorite`);
+    console.log("Testing isFavorite code");
+    return this.http.get<boolean>(`${this.baseUrl}favourites/${clothingItemId}/isFavorite`);
   }}

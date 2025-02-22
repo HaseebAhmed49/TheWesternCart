@@ -19,13 +19,17 @@ export class ShopService {
   pagination?: IPagination<ClothingItem[]>;
   clothingParams = new ClothingParams();
   clothingCache = new Map<string, IPagination<ClothingItem[]>>();
+  
   constructor(private http: HttpClient) { }
+  
   setShopParams(params: ClothingParams) {
     this.clothingParams = params;
   }
+
   getShopParams() {
     return this.clothingParams;
   }
+
   getClothing(id: string) {
     const clothing = [...this.clothingCache.values()]
       .reduce((acc, paginatedResult) => {
@@ -34,12 +38,14 @@ export class ShopService {
     if (Object.keys(clothing).length !== 0) return of(clothing);
     return this.http.get<ClothingItem>(this.baseUrl + 'clothing/' + id);
   }
+
   getBrands() {
     if (this.brands.length > 0) return of(this.brands);
     return this.http.get<Brand[]>(this.baseUrl + 'clothing/brands').pipe(
       map(brands => this.brands = brands)
     );
   }
+  
   getClothingItems(useCache = true): Observable<IPagination<ClothingItem[]>> {
     if (!useCache) this.clothingCache = new Map();
     const cacheKey = Object.values(this.clothingParams).join('-');
@@ -82,9 +88,11 @@ export class ShopService {
   addClothingBrand(clothingBrand: Brand): Observable<void> {
     return this.http.post<void>(this.baseUrl + 'clothing/brands', clothingBrand);
   }
+
   addClothingItem(clothingItem: ClothingItem): Observable<void> {
     return this.http.post<void>(this.baseUrl + 'clothing/items', clothingItem);
   }
+  
   getAllClothingItems(): Observable<ClothingItem[]> {
     return this.http.get<ClothingItem[]>(this.baseUrl + 'clothing/all');
   }

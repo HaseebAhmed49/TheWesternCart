@@ -23,6 +23,8 @@ export class AccountService {
         const user = response;
         if (user) {
           this.setCurrentUser(user);
+          console.log(user.username);
+          console.log("Testing login code");
           this.router.navigateByUrl('/shop');
         }
       }),
