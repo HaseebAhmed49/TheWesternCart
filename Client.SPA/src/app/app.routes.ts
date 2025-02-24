@@ -13,10 +13,6 @@ export const routes: Routes = [
     data: {breadcrumb: 'Shop'}
   },
   {
-    path: 'basket', loadChildren: () => import('./basket/basket.module').then(m => m.BasketModule),
-    data: {breadcrumb: 'Basket'}
-  },
-  {
     path: 'account',
     loadChildren: () => import('./account/account.module').then(m => m.AccountModule),
     data: {breadcrumb: {skip: true}}
@@ -26,6 +22,15 @@ export const routes: Routes = [
     runGuardsAndResolvers: 'always',
     canActivate: [authGuard],
     children: [
+      {
+        path: 'basket', loadChildren: () => import('./basket/basket.module').then(m => m.BasketModule),
+        data: {breadcrumb: 'Basket'}
+      },
+      {
+        path: 'checkout',
+        loadChildren: () => import('./checkout/checkout.module').then(m => m.CheckoutModule),
+        data: {breadcrumb: 'Checkout'}
+      },
       {path: 'favorites', component: FavouritesComponent},
       {
         path: 'wishlist',
