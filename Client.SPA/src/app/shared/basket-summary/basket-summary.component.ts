@@ -11,15 +11,18 @@ import { BasketService } from '../../basket/basket.service';
 
 export class BasketSummaryComponent {
   @Output() addItem = new EventEmitter<BasketItem>();
-  @Output() removeItem = new EventEmitter<{ id: number, quantity: number }>();
+  @Output() removeItem = new EventEmitter<{ id: string, quantity: number }>();
   @Input() isBasket = true;
   displayedColumns: string[] = ['product', 'price', 'quantity', 'total', 'remove'];
+
   constructor(public basketService: BasketService) {
   }
+
   addBasketItem(item: BasketItem) {
     this.addItem.emit(item);
   }
-  removeBasketItem(id: number, quantity = 1) {
+
+  removeBasketItem(id: string, quantity = 1) {
     this.removeItem.emit({id, quantity});
   }
 }

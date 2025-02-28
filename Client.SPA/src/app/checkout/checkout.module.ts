@@ -23,7 +23,8 @@ import { CheckoutComponent } from './checkout/checkout.component';
   imports: [
     CommonModule,
     CheckoutRoutingModule,
-    SharedModule
+    SharedModule,
+    
   ]
 })
 export class CheckoutModule { }
