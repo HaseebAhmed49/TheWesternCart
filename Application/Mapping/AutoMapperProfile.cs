@@ -76,15 +76,20 @@ namespace Application.Mapping
                 .ForMember(dest => dest.ClothingItemName, opt => opt.MapFrom(src => src.ClothingItem.Name))
                 .ReverseMap();
             
-            CreateMap<OrderHistory, OrderHistoryDto>().ReverseMap();
-            CreateMap<OrderItemHistory, OrderItemHistoryDto>().ReverseMap();
             
             CreateMap<DateTime, DateTime>().ConvertUsing(d => DateTime.SpecifyKind(d, DateTimeKind.Utc));
             CreateMap<DateTime?, DateTime?>()
                 .ConvertUsing(d => d.HasValue ? DateTime.SpecifyKind(d.Value, DateTimeKind.Utc) : null);
 
             CreateMap<ClothingBrand, ClothingBrandDto>().ReverseMap();
+
+            CreateMap<AddressDto, AddressAggregate>().ReverseMap();
+
+            CreateMap<UserDto, User>().ReverseMap();
+            CreateMap<OrderHistory, OrderHistoryDto>().ReverseMap();
+            CreateMap<OrderHistory, OrderHistoryToReturnDto>().ReverseMap();
+            CreateMap<OrderItemHistory, OrderItemHistoryDto>().ReverseMap();
+            CreateMap<OrderHistoryToReturnDto, OrderHistory>().ReverseMap();
         }
-        
     }
 }

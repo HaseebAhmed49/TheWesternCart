@@ -21,6 +21,7 @@ namespace Application.UoW
         IRatingRepository RatingRepository { get; }
         IWishListRepository WishListRepository { get; }
         IPhotoRepository PhotoRepository { get; }
+        IOrderHistoryRepository OrderHistoryRepository { get; }
         IUserRepository UserRepository { get; }
         UserManager<User> UserManager { get; }
         SignInManager<User> SignInManager { get; }

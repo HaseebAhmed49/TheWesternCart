@@ -19,23 +19,31 @@ namespace Application.Services
         private readonly IBasketService _basketService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IOrderHistoryService _orderHistoryService;
-        private readonly IMapper _mapper;  
-        public OrderService(IBasketService basketService, IUnitOfWork unitOfWork, 
-            IOrderHistoryService orderHistoryService, IMapper mapper)
+        private readonly IMapper _mapper;
+
+        public OrderService(IBasketService basketService, IUnitOfWork unitOfWork, IOrderHistoryService orderHistoryService, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
-            _basketService = basketService;               
+            _basketService = basketService;
             _orderHistoryService = orderHistoryService;
             _mapper = mapper;
         }
+
         public async Task<Order> CreateOrderAsync(string buyerEmail, Guid deliveryMethodId, string basketId,
             AddressAggregate shippingAddress)
         {
             var basket = await _basketService.GetBasketAsync(basketId);
-            if(basket == null)
+            if (basket == null)
             {
                 throw new NotFoundException($"Basket with ID '{basketId}' not found.");
             }
+            
+            var userId = _unitOfWork.UserManager.Users.FirstOrDefault(u => u.Email == buyerEmail)?.Id;
+            if (userId == null)
+            {
+                throw new NotFoundException($"User with email '{buyerEmail}' not found.");
+            }
+
             var items = new List<OrderItem>();
             foreach (var item in basket.Items)
             {
@@ -44,23 +52,29 @@ namespace Application.Services
                 {
                     throw new NotFoundException($"Product item with ID '{item.Id}' not found.");
                 }
+
                 var itemOrdered = new ClothingItemOrdered(productItem.Id, productItem.Name, productItem.ClothingItemPhotos);
                 var orderItem = new OrderItem(itemOrdered, productItem.Price, item.Quantity);
                 items.Add(orderItem);
             }
+
+
             var deliveryMethod = await _unitOfWork.GenericRepository<DelieveryMethod>().GetByIdAsync(deliveryMethodId);
-                if (deliveryMethod == null)
+            if (deliveryMethod == null)
             {
                 throw new NotFoundException($"Delivery method with ID '{deliveryMethodId}' not found.");
             }
+
             var subtotal = items.Sum(item => item.Price * item.Quantity);
             var spec = new OrderByPaymentIntentIdSpecification(basket.PaymentIntentId);
             var order = await _unitOfWork.GenericRepository<Order>().GetEntityWithSpec(spec);
+
             if (order != null)
             {
                 order.ShipToAddress = shippingAddress;
                 order.DeliveryMethod = deliveryMethod;
                 order.Subtotal = subtotal;
+                order.OrderItems = items;
                 _unitOfWork.GenericRepository<Order>().Update(order);
             }
             else
@@ -69,22 +83,33 @@ namespace Application.Services
                     subtotal, basket.PaymentIntentId);
                 _unitOfWork.GenericRepository<Order>().Add(order);
             }
+
             var result = await _unitOfWork.SaveAsync();
             if (result <= 0)
             {
                 throw new InternalServerException("Failed to save the order.");
-            }  
+            }
 
-
-            var orderDto = new OrderDto
+            var orderHistoryDto = new OrderHistoryDto
             {
-                BasketId = basketId,
-                DeliveryMethodId = deliveryMethodId,
-                ShipToAddress = _mapper.Map<AddressDto>(shippingAddress)
+                OrderDate = order.OrderDate.DateTime,
+                TotalAmount = order.GetTotal(),
+                Status = order.Status.ToString(),
+                ShippingAddress = order.ShipToAddress.AddressLine,
+                OrderItems = order.OrderItems.Select(item => new OrderItemHistoryDto
+                {
+                    ClothingItemId = item.ItemOrdered.ClothingItemId,
+                    ClothingItemName = item.ItemOrdered.ClothingItemName,
+                    Quantity = item.Quantity,
+                    PriceAtPurchase = item.Price
+                }).ToList()
             };
-            await _orderHistoryService.CreateOrderHistoryAsync(orderDto);
+            
+            await _orderHistoryService.CreateOrderHistoryAsync(orderHistoryDto, userId);
+
             return order;
         }
+    
         public async Task<IReadOnlyList<DelieveryMethod>> GetDeliveryMethodsAsync()
         {
             return await _unitOfWork.GenericRepository<DelieveryMethod>().ListAllAsync();

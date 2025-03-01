@@ -37,10 +37,13 @@ namespace Core.Entities.OrderAggregate
         public string PaymentIntentId { get; set; }
         public decimal GetTotal()
         {
-            decimal discount = Coupon != null && Coupon.IsActive && Coupon.ExpiryDate > DateTime.Now
-                ? Subtotal * Coupon.DiscountPercentage / 100
-                : 0;
-            return Subtotal + DeliveryMethod.Price - discount;
+            decimal discount = 0;
+            if (Coupon != null && Coupon.IsActive && Coupon.ExpiryDate > DateTime.Now)
+            {
+                discount = Subtotal * Coupon.DiscountPercentage / 100;
+            }
+            decimal deliveryPrice = DeliveryMethod?.Price ?? 0;
+            return Subtotal + deliveryPrice - discount;
         }
     }
 }

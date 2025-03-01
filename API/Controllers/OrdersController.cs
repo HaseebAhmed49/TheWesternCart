@@ -34,10 +34,21 @@ namespace API.Controllers
             try
             {
                 var email = User.GetUserEmail();
+                if (string.IsNullOrEmpty(email))
+                {
+                    return BadRequest(new ApiResponse(400, "User email is null or empty"));
+                }
                 var address = _mapper.Map<AddressDto, AddressAggregate>(orderDto.ShipToAddress);
+                if (address == null)
+                {
+                    return BadRequest(new ApiResponse(400, "Address mapping failed"));
+                }
                 var order = await _orderService.CreateOrderAsync(email, orderDto.DeliveryMethodId, orderDto.BasketId,
                     address);
-                if (order == null) return BadRequest(new ApiResponse(400, "Problem creating order"));
+                if (order == null)
+                {
+                    return BadRequest(new ApiResponse(400, "Problem creating order"));
+                }
                 return Ok(_mapper.Map<OrderToReturnDto>(order));
             }
             catch (Exception ex)
