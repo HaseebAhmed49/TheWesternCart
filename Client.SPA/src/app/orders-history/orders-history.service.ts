@@ -13,9 +13,9 @@ export class OrdersHistoryService {
   baseUrl = environment.apiUrl;
   constructor(private http: HttpClient) { }
   getOrderHistoriesForUser(userId: string): Observable<OrderHistory[]> {
-    return this.http.get<OrderHistory[]>(`${this.baseUrl}orderhistory/${userId}`);
+    return this.http.get<OrderHistory[]>(`${this.baseUrl}ordershistory/${userId}`);
   }
   getOrderHistoryById(id: string): Observable<OrderHistory> {
-    return this.http.get<OrderHistory>(`${this.baseUrl}orderhistory/order/${id}`);
+    return this.http.get<OrderHistory>(`${this.baseUrl}ordershistory/order/${id}`);
   }
 }
