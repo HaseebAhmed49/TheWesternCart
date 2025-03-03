@@ -5,6 +5,7 @@ import { OrderHistory } from '../../shared/models/order-history';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../shared/modules/material/material.module';
 import { SharedModule } from '../../shared/shared.module';
+import { OrderHistoryToReturn } from '../../shared/models/order-history-to-return';
 
 @Component({
   selector: 'app-orders-history',
@@ -19,18 +20,23 @@ import { SharedModule } from '../../shared/shared.module';
 })
 
 export class OrdersHistoryComponent implements OnInit {
-  orderHistories: OrderHistory[] = [];
+  orderHistories: OrderHistoryToReturn[] = [];
   displayedColumns: string[] = ['order', 'date', 'total', 'status'];
+  
   constructor(private ordersHistoryService: OrdersHistoryService, private route: ActivatedRoute) { }
+  
   ngOnInit(): void {
-    const userId = this.route.snapshot.paramMap.get('userId');
-    if (userId) {
-      this.getOrderHistoriesForUser(userId);
-    }
+    this.loadOrderHistories();
   }
-  getOrderHistoriesForUser(userId: string) {
-    this.ordersHistoryService.getOrderHistoriesForUser(userId).subscribe({
-      next: orderHistories => this.orderHistories = orderHistories
+  
+  loadOrderHistories() {
+    this.ordersHistoryService.getOrderHistoriesByUserId().subscribe({
+      next: (orderHistories) => {
+        this.orderHistories = orderHistories;
+        this.orderHistories.forEach(item => {
+        });
+      },
+      error: (error) => console.error('Error loading orders:', error)
     });
   }
 }

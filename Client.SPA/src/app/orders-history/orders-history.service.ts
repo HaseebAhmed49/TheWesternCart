@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { OrderHistory } from '../shared/models/order-history';
 import { environment } from '../../environments/environment';
-import { Guid } from 'guid-typescript'
+import { OrderHistoryToReturn } from '../shared/models/order-history-to-return';
 
 @Injectable({
   providedIn: 'root'
@@ -11,11 +10,14 @@ import { Guid } from 'guid-typescript'
 
 export class OrdersHistoryService {
   baseUrl = environment.apiUrl;
+
   constructor(private http: HttpClient) { }
-  getOrderHistoriesForUser(userId: string): Observable<OrderHistory[]> {
-    return this.http.get<OrderHistory[]>(`${this.baseUrl}ordershistory/${userId}`);
+
+  getOrderHistoriesByUserId(): Observable<OrderHistoryToReturn[]> {
+    return this.http.get<OrderHistoryToReturn[]>(`${this.baseUrl}ordershistory/user`);
   }
-  getOrderHistoryById(id: string): Observable<OrderHistory> {
-    return this.http.get<OrderHistory>(`${this.baseUrl}ordershistory/order/${id}`);
+
+  getOrderHistoryById(id: string): Observable<OrderHistoryToReturn> {
+    return this.http.get<OrderHistoryToReturn>(`${this.baseUrl}ordershistory/order/${id}`);
   }
 }

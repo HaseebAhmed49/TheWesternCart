@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Errors;
+using API.Extensions;
 using Application.DTOs;
 using Application.Exceptions;
 using Application.Services.Interfaces;
@@ -21,12 +22,13 @@ namespace API.Controllers
         {
             _orderHistoryService = orderHistoryService;
         }
-        [HttpGet("{userId}")]
-        public async Task<ActionResult<IReadOnlyList<OrderHistoryDto>>> GetOrderHistoriesForUser(string userId)
+        [HttpGet("user")]
+        public async Task<ActionResult<IReadOnlyList<OrderHistoryToReturnDto>>> GetOrderHistoriesByUserId()
         {
             try
             {
-                var orderHistories = await _orderHistoryService.GetOrderHistoriesForUserAsync(userId);
+                var userId = User.GetUserId();
+                var orderHistories = await _orderHistoryService.GetOrderHistoriesByUserIdAsync(userId);
                 if (orderHistories == null || !orderHistories.Any())
                 {
                     return NotFound(new ApiResponse(404, $"Order histories not found for user with ID '{userId}'."));

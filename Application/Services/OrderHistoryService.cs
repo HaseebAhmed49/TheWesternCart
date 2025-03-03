@@ -50,7 +50,7 @@ namespace Application.Services
             await _unitOfWork.SaveAsync();
         }
 
-        public async Task<IReadOnlyList<OrderHistoryToReturnDto>> GetOrderHistoriesForUserAsync(string userId)
+        public async Task<IReadOnlyList<OrderHistoryToReturnDto>> GetOrderHistoriesByUserIdAsync(string userId)
         {
             var orderHistories = await _unitOfWork.OrderHistoryRepository.GetOrderHistoryByUserIdAsync(userId);
             if (orderHistories == null)
