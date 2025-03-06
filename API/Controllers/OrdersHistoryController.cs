@@ -22,6 +22,7 @@ namespace API.Controllers
         {
             _orderHistoryService = orderHistoryService;
         }
+
         [HttpGet("user")]
         public async Task<ActionResult<IReadOnlyList<OrderHistoryToReturnDto>>> GetOrderHistoriesByUserId()
         {
@@ -40,6 +41,7 @@ namespace API.Controllers
                 return StatusCode(500, new ApiResponse(500, "An error occurred while processing your request"));
             }
         }
+        
         [HttpGet("order/{id}")]
         public async Task<ActionResult<OrderHistoryDto>> GetOrderHistoryById(Guid id)
         {

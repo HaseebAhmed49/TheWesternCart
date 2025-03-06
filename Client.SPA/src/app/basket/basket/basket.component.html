@@ -1,4 +1,8 @@
-<div class="container mt-5 basket-container">
+<mat-card class="basket-card">
+  <mat-card-header class="basket-header">
+    <mat-card-title>Basket</mat-card-title>
+  </mat-card-header>
+  <mat-card-content class="basket-content"><div class="container mt-5 basket-container">
     <div *ngIf="(basketService.basketSource$ | async) === null">
       <p class="no-items-message">There are no items in your basket</p>
     </div>
@@ -11,7 +15,7 @@
           ></app-basket-summary>
         </div>
         <div class="row m-sm-5">
-          <div class="col-6 offset-6">
+          <div class="col-6 offset-6" style="margin-top: 0.5rem; padding: 0.5rem;">
             <app-order-totals></app-order-totals>
             <div class="d-grid">
               <button mat-raised-button color="primary" routerLink="/checkout" class="py-2 checkout-button">
@@ -23,3 +27,8 @@
       </div>
     </ng-container>
   </div>
+  <div class="d-grid">
+    <button mat-raised-button color="primary"  routerLink="/checkout">Proceed to checkout</button>
+  </div>
+</mat-card-content>
+</mat-card>
