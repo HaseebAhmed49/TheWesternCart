@@ -30,8 +30,6 @@ import { JwtInterceptor } from './core/interceptors/jwt.interceptor';
     appConfig,  // Use the new appConfig for routing and change detection
     GalleryModule,
     HttpClient,
-    BrowserModule,
-    BrowserAnimationsModule,
     SharedModule,
     CoreModule,
     FormsModule,
