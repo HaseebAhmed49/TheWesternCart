@@ -31,7 +31,7 @@ import { SharedModule } from '../../shared/shared.module';
 })
 
 export class CheckoutPaymentComponent implements OnInit {
-  @Input() checkoutForm?: FormGroup;
+  @Input() checkoutForm: FormGroup = new FormGroup({});
   @ViewChild('cardNumber') cardNumberElement?: ElementRef;
   @ViewChild('cardExpiry') cardExpiryElement?: ElementRef;
   @ViewChild('cardCvc') cardCvcElement?: ElementRef;
