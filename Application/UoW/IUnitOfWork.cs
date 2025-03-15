@@ -22,6 +22,7 @@ namespace Application.UoW
         IWishListRepository WishListRepository { get; }
         IPhotoRepository PhotoRepository { get; }
         IOrderHistoryRepository OrderHistoryRepository { get; }
+        ICouponRepository CouponRepository { get; }
         IUserRepository UserRepository { get; }
         UserManager<User> UserManager { get; }
         SignInManager<User> SignInManager { get; }

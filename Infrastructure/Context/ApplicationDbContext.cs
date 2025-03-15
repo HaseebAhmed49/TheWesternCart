@@ -36,6 +36,7 @@ namespace Infrastructure.Context
         public DbSet<WishListItem> WishlistItems { get; set; }
         public DbSet<UserPhoto> UserPhotos { get; set; }
         public DbSet<ClothingItemPhoto> ClothingItemPhotos { get; set; }
+        public DbSet<Coupon> Coupons {get; set;}
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

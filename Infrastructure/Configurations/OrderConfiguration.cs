@@ -33,7 +33,7 @@ namespace Infrastructure.Configurations
                 .IsRequired();
             builder.HasOne(o => o.DeliveryMethod)
                 .WithMany()
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
             builder.HasOne(o => o.Coupon)
                 .WithMany()
                 .HasForeignKey(o => o.CouponId)

@@ -29,6 +29,7 @@ namespace Infrastructure.UoW
         private IWishListRepository _wishListRepository;
         private IPhotoRepository _photoRepository;
         private IOrderHistoryRepository _orderHistoryRepository;
+        private ICouponRepository _couponRepository;
         private IUserRepository _userRepository;
 
         public UnitOfWork(
@@ -81,7 +82,8 @@ namespace Infrastructure.UoW
         _photoRepository ??= new PhotoRepository(_context);
         public IOrderHistoryRepository OrderHistoryRepository =>
         _orderHistoryRepository ??= new OrderHistoryRepository(_context);
-
+        public ICouponRepository CouponRepository =>
+                _couponRepository ??= new CouponRepository(_context);
         public IUserRepository UserRepository => _userRepository ??= new UserRepository(_context);
         public UserManager<User> UserManager => _userManager;
         public SignInManager<User> SignInManager => _signInManager;

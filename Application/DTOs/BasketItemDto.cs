@@ -22,5 +22,7 @@ namespace Application.DTOs
         public string PictureUrl { get; set; }
         [Required]
         public string Brand { get; set; }
+
+        public decimal? Discount { get; set; }
     }
 }

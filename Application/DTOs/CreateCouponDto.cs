@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace Application.DTOs
 {
-    public class ApplyCouponDto
+    public class CreateCouponDto
     {
-        public Guid ClothingItemId { get; set; }
-        public Guid CouponCodeId { get; set; }
+        public int DiscountPercentage { get; set; }
+        public DateTime ExpiryDate { get; set; }
     }
 }

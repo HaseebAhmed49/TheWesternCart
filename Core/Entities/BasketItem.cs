@@ -9,5 +9,6 @@ namespace Core.Entities
         public int Quantity { get; set; }
         public string PictureUrl { get; set; }
         public string Brand { get; set; }
+        public decimal? Discount { get; set; }
     }
 }
