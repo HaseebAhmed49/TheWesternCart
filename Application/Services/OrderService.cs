@@ -53,8 +53,17 @@ namespace Application.Services
                     throw new NotFoundException($"Product item with ID '{item.Id}' not found.");
                 }
 
+                decimal discountPrice;
+                if (productItem.Discount == null || productItem.Discount == 0)
+                {
+                    discountPrice = productItem.Price;
+                }
+                else
+                {
+                    discountPrice = productItem.Price - (productItem.Price * (productItem.Discount.Value / 100));
+                }
                 var itemOrdered = new ClothingItemOrdered(productItem.Id, productItem.Name, productItem.ClothingItemPhotos);
-                var orderItem = new OrderItem(itemOrdered, productItem.Price, item.Quantity);
+                var orderItem = new OrderItem(itemOrdered, discountPrice, item.Quantity);
                 items.Add(orderItem);
             }
 
