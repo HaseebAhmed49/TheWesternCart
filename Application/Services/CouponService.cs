@@ -4,10 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Application.DTOs;
 using Application.Exceptions;
+using Application.Hubs;
+using Application.Hubs.Interfaces;
 using Application.Services.Interfaces;
 using Application.UoW;
 using AutoMapper;
 using Core.Entities;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Application.Services
 {
@@ -15,11 +18,14 @@ namespace Application.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly IHubContext<DiscountNotificationHub, INotificationHub> _discountNotification;
         private readonly INotificationService _notificationService;
-        public CouponService(IUnitOfWork unitOfWork, IMapper mapper, INotificationService notificationService)
+        public CouponService(IUnitOfWork unitOfWork, IMapper mapper,
+        IHubContext<DiscountNotificationHub, INotificationHub> hubContext, INotificationService notificationService)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _discountNotification = hubContext;
             _notificationService = notificationService;
         }
 
@@ -60,16 +66,25 @@ namespace Application.Services
             await _unitOfWork.SaveAsync();
             var wishlists = await _unitOfWork.WishListRepository.GetWishListsByClothingItemIdAsync(clothingItemId);
             
-            /*
+            
             var usersToNotify = wishlists
                 .Where(w => w.Items.Any(wi => wi.ClothingItemId == clothingItemId))
                 .Select(w => w.UserId)
                 .ToList();
             foreach (var userId in usersToNotify)
             {
-                await _notificationService.NotifyUserAboutDiscountAsync(userId, clothingItemId);
-            }
-            */
+                var notification = new Notification
+                {
+                    Text =
+                        $"A discount of {coupon.DiscountPercentage}% has been applied to an {clothingItem.Name} item in your wishlist.",
+                    UserId = userId,
+                    IsRead = false
+                };
+
+                await _notificationService.AddNotificationAsync(notification);
+
+                await _discountNotification.Clients.Group(userId).SendMessage(notification);
+            }            
         }
         
     }
