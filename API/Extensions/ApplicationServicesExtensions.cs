@@ -62,6 +62,8 @@ namespace API.Extensions
             services.AddScoped<IAdminService, AdminService>();
             services.AddScoped<IClothingItemService, ClothingItemService>();
             services.AddScoped<ICouponService, CouponService>();
+            
+            services.AddSignalR();
             return services;
         }
     }

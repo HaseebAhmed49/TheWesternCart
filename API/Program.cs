@@ -1,5 +1,6 @@
 using API.Extensions;
 using API.Middleware;
+using Application.Hubs;
 using Core.Entities;
 using Infrastructure.Context;
 using Infrastructure.SeedData;
@@ -42,6 +43,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseDefaultFiles();
 app.MapControllers();
+
+app.MapHub<DiscountNotificationHub>("/Notify");
 
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
